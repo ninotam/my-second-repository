@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHIFT AI Discord アンケート結果レポート 2026年2月</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blurple:#5865F2;--blurple-dark:#4752C4;--blurple-light:#7289DA;
+  --bg-darkest:#23272A;--bg-dark:#2C2F33;
+  --bg-light:#F2F3F5;--bg-white:#FFFFFF;
+  --text-white:#FFFFFF;--text-light:#DCDDDE;--text-muted:#72767D;
+  --green:#57F287;--yellow:#FEE75C;--red:#ED4245;--orange:#F5A623;
+  --radius:8px;--shadow:0 2px 12px rgba(0,0,0,.08)
+}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:var(--bg-light);color:#1a1a2e;line-height:1.6;font-size:15px;font-weight:400;-webkit-font-smoothing:antialiased}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#23272A 0%,#2C2F33 40%,#3C3F77 100%);color:#fff;padding:64px 24px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(88,101,242,.25) 0%,transparent 70%);border-radius:50%}
+.hero-eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--blurple-light);margin-bottom:12px;font-weight:600}
+.hero-title{font-size:28px;font-weight:800;margin-bottom:10px;line-height:1.3}
+.hero-sub{font-size:15px;color:#B9BBBE;margin-bottom:24px}
+.hero-meta{display:inline-flex;align-items:center;gap:24px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:40px;padding:10px 24px;font-size:13px;color:#DCDDDE}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.hero-meta strong{color:#fff;font-weight:700;font-size:18px}
+
+/* LAYOUT */
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+.section{padding:64px 0}
+.section-alt{background:var(--bg-white)}
+.section-dark{background:var(--bg-darkest);color:#fff}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blurple);margin-bottom:8px}
+.section-dark .section-label{color:var(--blurple-light)}
+.section-title{font-size:24px;font-weight:800;margin-bottom:8px;color:#1a1a2e}
+.section-dark .section-title{color:#fff}
+.section-desc{font-size:14px;color:#555;margin-bottom:36px;max-width:600px;line-height:1.7}
+.section-dark .section-desc{color:var(--text-light)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0 20px}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.kpi-card{background:#fff;border-radius:var(--radius);padding:24px 20px;text-align:center;box-shadow:var(--shadow);border-top:3px solid var(--blurple)}
+.kpi-num{font-size:44px;font-weight:900;line-height:1;color:var(--blurple);margin-bottom:6px}
+.kpi-num.red{color:var(--red)}.kpi-num.orange{color:var(--orange)}
+.kpi-card-label{font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
+.kpi-card-sub{font-size:11px;color:#999}
+.conclusion-box{background:linear-gradient(135deg,var(--blurple) 0%,var(--blurple-dark) 100%);color:#fff;border-radius:var(--radius);padding:20px 24px;font-size:15px;font-weight:600;margin-top:24px;text-align:center;line-height:1.6}
+
+/* PROFILE TOGGLE */
+.profile-toggle-btn{display:flex;align-items:center;justify-content:space-between;width:100%;background:#fff;border:1px solid #e0e0e0;border-radius:var(--radius);padding:12px 18px;cursor:pointer;font-size:13px;color:#555;font-family:inherit;margin-top:20px;transition:background .15s}
+.profile-toggle-btn:hover{background:#f8f9ff;border-color:var(--blurple)}
+.profile-toggle-btn span{font-weight:600;color:#333}
+.profile-toggle-chevron{font-size:12px;color:#aaa;transition:transform .2s}
+.profile-panel{display:none;margin-top:0;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 var(--radius) var(--radius);background:#fff;padding:24px 20px}
+.profile-panel.open{display:block}
+.profile-toggle-btn.open{border-radius:var(--radius) var(--radius) 0 0}
+.profile-toggle-btn.open .profile-toggle-chevron{transform:rotate(180deg)}
+.profile-wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:center}
+@media(max-width:700px){.profile-wrap{grid-template-columns:1fr}}
+.profile-donut-wrap{position:relative;max-width:240px;margin:0 auto}
+.legend-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.legend-label{flex:1}.legend-count{font-weight:700;color:#333}.legend-pct{color:#888;font-size:11px}
+
+/* CHART WRAP */
+.chart-wrap{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.chart-title{font-size:14px;font-weight:700;color:#333;margin-bottom:4px}
+.chart-subtitle{font-size:12px;color:#888;margin-bottom:16px}
+
+/* Q1 GAUGE */
+.gauge-bar{display:flex;height:40px;border-radius:6px;overflow:hidden}
+.gauge-seg{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(255,255,255,.9);cursor:default}
+.gauge-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.gauge-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.gauge-legend-dot{width:10px;height:10px;border-radius:2px}
+.gauge-sum{display:flex;flex-wrap:wrap;gap:20px;margin-top:12px;font-size:13px;font-weight:700}
+
+/* HBAR (side-label / compact) */
+.hbar-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.hbar-item{display:flex;align-items:center;gap:10px}
+.hbar-label{width:200px;flex-shrink:0;font-size:12px;color:#333;text-align:right;line-height:1.3}
+.hbar-track{flex:1;background:#eee;border-radius:4px;height:28px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:4px;background:var(--blurple);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;min-width:28px}
+.hbar-fill.dim{background:rgba(88,101,242,.55)}
+.hbar-val{font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
+.hbar-abs{font-size:11px;color:#999;width:36px;flex-shrink:0}
+
+/* HBAR2 (label-above / wide bar) for Section02 */
+.hbar2-list{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.hbar2-item{}
+.hbar2-label{font-size:13px;color:#333;margin-bottom:5px;line-height:1.4;font-weight:500}
+.hbar2-row{display:flex;align-items:center;gap:10px}
+.hbar2-track{flex:1;background:#eee;border-radius:5px;height:34px;overflow:hidden}
+.hbar2-fill{height:100%;border-radius:5px;background:var(--blurple);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;min-width:40px}
+.hbar2-fill.dim{background:rgba(88,101,242,.55)}
+.hbar2-val{font-size:13px;font-weight:700;color:#fff}
+.hbar2-abs{font-size:12px;color:#888;width:40px;text-align:right;flex-shrink:0}
+@media(max-width:600px){.hbar-label{width:120px;font-size:11px}}
+
+/* Q7 */
+.q7-cat-block{background:#fff;border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.q7-cat-header{display:flex;align-items:center;padding:14px 18px;cursor:pointer;user-select:none;gap:10px;transition:background .15s}
+.q7-cat-header:hover{background:#f8f9ff}
+.q7-cat-name{width:200px;flex-shrink:0;font-size:13px;font-weight:700;color:#333}
+.q7-cat-bar-wrap{flex:1;background:#eee;border-radius:4px;height:20px;overflow:hidden}
+.q7-cat-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-right:6px;justify-content:flex-end}
+.q7-cat-bar-val{font-size:11px;font-weight:700;color:#fff}
+.q7-cat-count{width:40px;text-align:right;font-size:12px;color:#888;flex-shrink:0}
+.q7-cat-chevron{font-size:12px;color:#aaa;transition:transform .2s;flex-shrink:0}
+.q7-cat-block.open .q7-cat-chevron{transform:rotate(180deg)}
+.q7-cat-body{display:none;padding:0 18px 16px}
+.q7-cat-block.open .q7-cat-body{display:block}
+/* 2 quotes visible by default */
+.q7-rep-quotes{}
+.q7-quote{background:#f8f9ff;border-left:3px solid var(--blurple);border-radius:0 4px 4px 0;padding:10px 14px;margin-bottom:8px;font-size:13px;line-height:1.6;color:#333}
+.q7-quote-author{font-size:11px;color:#888;margin-top:4px}
+.q7-expand-btn{background:none;border:1px solid #ddd;border-radius:20px;padding:5px 14px;font-size:12px;color:var(--blurple);cursor:pointer;transition:all .15s;font-family:inherit;margin-top:4px}
+.q7-expand-btn:hover{background:#f0f2ff;border-color:var(--blurple)}
+.q7-all-list{display:none;margin-top:10px;border:1px solid #eee;border-radius:6px;max-height:400px;overflow-y:auto}
+.q7-all-list.open{display:block}
+.q7-all-item{padding:8px 12px;border-bottom:1px solid #f5f5f5;font-size:12px;line-height:1.5;color:#444;white-space:pre-line}
+.q7-all-item:last-child{border-bottom:none}
+.q7-all-author{font-size:11px;color:#aaa;margin-bottom:2px}
+
+/* 全コメント内蔵型 */
+.allcomments-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-top:28px;overflow:hidden}
+.allcomments-header{padding:16px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:background .15s}
+.allcomments-header:hover{background:#f8f9ff}
+.allcomments-header-title{font-size:14px;font-weight:700;color:#333}
+.allcomments-header-sub{font-size:12px;color:#888;margin-left:8px}
+.allcomments-chevron{font-size:12px;color:#aaa;transition:transform .2s}
+.allcomments-panel.open .allcomments-chevron{transform:rotate(180deg)}
+.allcomments-body{display:none;padding:0 20px 20px}
+.allcomments-panel.open .allcomments-body{display:block}
+.search-wrap{position:relative;margin-bottom:14px;margin-top:16px}
+.search-input{width:100%;padding:11px 16px 11px 40px;border:2px solid #ddd;border-radius:8px;font-size:14px;outline:none;transition:border-color .15s;background:#fff;font-family:inherit}
+.search-input:focus{border-color:var(--blurple)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#aaa;font-size:15px;pointer-events:none}
+.search-count{font-size:12px;color:#888;margin-bottom:10px}
+.comment-card{background:#fafafa;border-radius:6px;padding:12px 16px;margin-bottom:8px;border-left:3px solid #ddd}
+.comment-card.bad{border-left-color:var(--red)}.comment-card.good{border-left-color:var(--green)}.comment-card.neutral{border-left-color:var(--yellow)}
+.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.comment-name{font-size:12px;font-weight:700;color:#333}
+.q1-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.q1-badge.bad{background:#fde8e8;color:var(--red)}.q1-badge.good{background:#e8fdf0;color:#1a9e50}.q1-badge.neutral{background:#fef9e0;color:#b8930a}
+.comment-text{font-size:12px;color:#444;line-height:1.6;white-space:pre-line}
+.highlight{background:#fff3cd;padding:0 2px;border-radius:2px}
+.load-more-btn{display:block;width:100%;padding:10px;background:#fff;border:2px dashed #ddd;border-radius:6px;cursor:pointer;font-size:12px;color:#888;text-align:center;margin-top:6px;transition:all .15s;font-family:inherit}
+.load-more-btn:hover{border-color:var(--blurple);color:var(--blurple)}
+
+/* SECTION 02 読み解き */
+.insight-box{background:#f0f2ff;border-radius:8px;padding:22px 24px;margin-top:8px;border-left:4px solid var(--blurple)}
+.insight-box h4{font-size:13px;font-weight:700;color:var(--blurple);margin-bottom:12px;letter-spacing:.5px}
+.insight-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+@media(max-width:640px){.insight-row{grid-template-columns:1fr}}
+.insight-block{}
+.insight-block-title{font-size:12px;font-weight:700;color:#333;margin-bottom:6px}
+.insight-block-body{font-size:13px;color:#444;line-height:1.7}
+
+/* ACTION CARDS */
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+@media(max-width:800px){.action-grid{grid-template-columns:1fr}}
+.action-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:26px 22px;display:flex;flex-direction:column;gap:0}
+.action-num{font-size:36px;font-weight:900;color:rgba(88,101,242,.4);line-height:1;margin-bottom:10px;font-family:Georgia,serif}
+.action-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.4}
+.action-tagline{font-size:12px;color:var(--blurple-light);font-weight:600;margin-bottom:14px;display:inline-block;background:rgba(88,101,242,.15);padding:3px 10px;border-radius:20px}
+.action-section-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;margin-top:14px}
+.action-body{font-size:13px;color:#B9BBBE;line-height:1.8}
+.action-body p{margin-bottom:8px}
+.action-body p:last-child{margin-bottom:0}
+.action-evidence{margin-top:16px;font-size:12px;border-top:1px solid rgba(255,255,255,.07);padding-top:12px;display:flex;flex-direction:column;gap:5px}
+.action-ev-item{color:rgba(255,255,255,.4);line-height:1.5}
+.action-ev-item strong{color:var(--green)}
+
+/* FOOTER */
+.footer{background:var(--bg-dark);color:var(--text-muted);text-align:center;padding:32px 20px;font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-eyebrow">SHIFT AI Discord 運営レポート</div>
+  <h1 class="hero-title">Discordの使いやすさ・改善点アンケート 結果報告</h1>
+  <p class="hero-sub">「もっと使われるDiscordに」するための、全員の声を読む</p>
+  <div class="hero-meta">
+    <span><strong>171</strong>&nbsp;名が回答</span>
+    <span>2026年2月 実施</span>
+    <span>自由記述 全件掲載</span>
+  </div>
+</header>
+
+<!-- SUMMARY + PROFILE -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Executive Summary</div>
+    <h2 class="section-title">調査の結論</h2>
+    <p class="section-desc">171名が教えてくれた、Discord改善の優先課題</p>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-num red">58%</div>
+        <div class="kpi-card-label">「使いづらい」と回答</div>
+        <div class="kpi-card-sub">かなり38名 + 少し61名 / 171名中</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num orange">117名</div>
+        <div class="kpi-card-label">チャンネルが多くて迷った</div>
+        <div class="kpi-card-sub">最多の困りごと（全体の68%）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">70%</div>
+        <div class="kpi-card-label">AI活用コンテンツを求めている</div>
+        <div class="kpi-card-sub">「AI活用例まとまる場所」120名が希望</div>
+      </div>
+    </div>
+    <div class="conclusion-box">
+      「使いにくい」の根本は<strong>チャンネル構造の複雑さ</strong>と<strong>入口のわかりにくさ</strong>にある。<br>
+      構造を整えた上で、<strong>AI活用コンテンツを起点</strong>とした体験設計に移行する。
+    </div>
+
+    <!-- 会員プロファイル：トグル -->
+    <button class="profile-toggle-btn" id="profileBtn" onclick="toggleProfile()">
+      <span>回答者の職種内訳（171名）</span>
+      <span class="profile-toggle-chevron">▾</span>
+    </button>
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-wrap">
+        <div class="profile-donut-wrap"><canvas id="q5Chart"></canvas></div>
+        <div>
+          <div id="q5Legend"></div>
+          <p style="margin-top:14px;font-size:13px;color:#555;line-height:1.8;">
+            特定の職種に偏らない多様な構成。<br>
+            「その他」57%・フリーランス29%・医療介護14%・エンジニア11%・教育11%。<br>
+            IT知識がある人だけが使える設計では大半がついてこれない。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TROUBLES -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Section 01 — 困りごと</div>
+    <h2 class="section-title">何に困っているのか</h2>
+    <p class="section-desc">満足度・具体的な困りごと・自由記述を重ねて読む。</p>
+
+    <!-- 満足度ゲージ -->
+    <div class="chart-wrap">
+      <div class="chart-title">Discordの使いやすさ（n=171）</div>
+      <div class="chart-subtitle">全体の58%が「使いづらい」と感じている</div>
+      <div id="q1Gauge" class="gauge-bar"></div>
+      <div id="q1Legend" class="gauge-legend"></div>
+      <div class="gauge-sum">
+        <span style="color:#2ecc71">● 使いやすい計 18%（31名）</span>
+        <span style="color:#999">● 普通 24%（41名）</span>
+        <span style="color:var(--red)">● 使いづらい計 58%（99名）</span>
+      </div>
+    </div>
+
+    <!-- 困ったこと -->
+    <div class="chart-wrap">
+      <div class="chart-title">困ったこと（複数選択 / n=171）</div>
+      <div class="chart-subtitle">「チャンネルで迷う」が断トツ1位。構造系の困りごとが上位を占める</div>
+      <div class="hbar-list" id="q2Bars"></div>
+    </div>
+
+    <!-- Q7 自由記述 -->
+    <div style="margin-top:36px">
+      <div class="section-label" style="margin-bottom:6px">自由記述の分析</div>
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:6px;color:#1a1a2e">自由記述こそが、本当の声</h3>
+      <p style="font-size:13px;color:#555;margin-bottom:20px;line-height:1.7">
+        171名全員がコメントを記入。キーワード分析により5カテゴリに分類した（複数カテゴリ重複あり）。
+      </p>
+      <div class="chart-wrap">
+        <div class="chart-title">カテゴリ別件数</div>
+        <div class="chart-subtitle">各コメントが含むキーワードから自動分類</div>
+        <div class="hbar-list" id="q7CatBars"></div>
+      </div>
+
+      <!-- Q7 categories: open by default, 2 quotes shown -->
+      <div id="q7Categories" style="margin-top:16px"></div>
+
+      <!-- 全コメント：内蔵コンパクト型 -->
+      <div class="allcomments-panel" id="allCommentsPanel">
+        <div class="allcomments-header" onclick="toggleAllComments()">
+          <div>
+            <span class="allcomments-header-title">全コメント一覧</span>
+            <span class="allcomments-header-sub">171件 — クリックで展開 / キーワード検索</span>
+          </div>
+          <span class="allcomments-chevron">▾</span>
+        </div>
+        <div class="allcomments-body">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" id="allCommentSearch" type="text" placeholder="キーワードで絞り込む（例：チャンネル、通知、初心者）">
+          </div>
+          <div class="search-count" id="searchCount"></div>
+          <div id="commentList"></div>
+          <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" style="display:none">さらに読み込む</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WANTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Section 02 — 欲しいもの</div>
+    <h2 class="section-title">何を求めているのか</h2>
+    <p class="section-desc">「こうなったら使いやすい」・「共通点で話せる場所」への回答。</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="chart-wrap">
+        <div class="chart-title">もっとこうなったら使いやすいと思うもの</div>
+        <div class="chart-subtitle">複数選択（n=171）</div>
+        <div class="hbar2-list" id="q3Bars"></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">共通点のある人同士で話せる場所</div>
+        <div class="chart-subtitle">複数選択（n=171）</div>
+        <div class="hbar2-list" id="q4Bars"></div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <h4>読み解き</h4>
+      <div class="insight-row">
+        <div class="insight-block">
+          <div class="insight-block-title">コンテンツへの需要</div>
+          <div class="insight-block-body">
+            「AI活用例がまとまる場所」が<strong>120名（70%）</strong>で圧倒的1位。<br>
+            「自動化の話」87名、「現場AI活用」84名が続く。<br>
+            具体的な使い方コンテンツへの需要が非常に高い。
+          </div>
+        </div>
+        <div class="insight-block">
+          <div class="insight-block-title">つながりへの需要</div>
+          <div class="insight-block-body">
+            「同じ悩みを持つ人」が<strong>106名（62%）</strong>で1位。<br>
+            「同じ仕事の人」91名と続き、属性ベースの小グループ交流を求めている。<br>
+            一対多の配信型でなく、少人数で話せる設計が必要。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIONS -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-label">Section 03 — 改善提案</div>
+    <h2 class="section-title">この結果から、やること3つ</h2>
+    <p class="section-desc">データが示す優先課題への、具体的なアクション。</p>
+    <div class="action-grid">
+
+      <div class="action-card">
+        <div class="action-num">①</div>
+        <div class="action-title">チャンネル構造の全体見直し</div>
+        <div class="action-tagline">目標：「オカンが見てもわかるDiscord」</div>
+        <div class="action-section-title">現状の課題</div>
+        <div class="action-body">
+          <p>チャンネル数が多すぎて、どこで何をすればいいかわからない。投稿場所が見つからず、結果として「見るだけ」で終わるメンバーが多い。</p>
+        </div>
+        <div class="action-section-title">やること</div>
+        <div class="action-body">
+          <p>全チャンネルを棚卸しし、カテゴリを最大5〜6に絞る。</p>
+          <p>各チャンネルに「ここで何ができるか」を一言で書いたピン留めを設置。入会直後に見るべき「スタートチャンネル」を一本化し、迷わず始められる導線を作る。</p>
+        </div>
+        <div class="action-evidence">
+          <div class="action-ev-item">困ったこと「チャンネルで迷った」<strong> 117名（68%）</strong></div>
+          <div class="action-ev-item">自由記述・チャンネル複雑さカテゴリ<strong> 42件</strong></div>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">②</div>
+        <div class="action-title">AI活用コンテンツのツール別集約</div>
+        <div class="action-tagline">「探す手間ゼロ」のコンテンツ棚</div>
+        <div class="action-section-title">現状の課題</div>
+        <div class="action-body">
+          <p>良いコンテンツが投稿されても、チャットの流れに埋もれて見つけられない。「情報が流れて追いづらい」という声が93名から上がっている。</p>
+        </div>
+        <div class="action-section-title">やること</div>
+        <div class="action-body">
+          <p>ChatGPT / Claude / Gemini などツール別に活用例タグを整備。</p>
+          <p>週次ハイライトをまとめる専用チャンネルを新設し、固定投稿と定期サマリーで情報の棚卸しを行う。「見たいときに見つけられる状態」を維持する。</p>
+        </div>
+        <div class="action-evidence">
+          <div class="action-ev-item">「AI活用例がまとまる場所を求める」<strong> 120名（70%）</strong></div>
+          <div class="action-ev-item">困ったこと「情報が流れて追いづらい」<strong> 93名（54%）</strong></div>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">③</div>
+        <div class="action-title">AIを入口にした体験設計</div>
+        <div class="action-tagline">既存Q&amp;ABotの強化 + 自動スレッド立て</div>
+        <div class="action-section-title">現状の課題</div>
+        <div class="action-body">
+          <p>入会直後に「何をすればいいかわからない」という迷いが発生し、最初の一歩が踏み出せないまま離脱するメンバーが多い。</p>
+        </div>
+        <div class="action-section-title">やること</div>
+        <div class="action-body">
+          <p>初心者チャンネルへの投稿 → 自動でスレッドが立つ → 同じ境遇のメンバーが集まる、というフローを設計。</p>
+          <p>Q&amp;ABotの回答精度を向上させ、「使い方がわからない」に即答できる体制を整える。孤独感なく使い始められる体験を作る。</p>
+        </div>
+        <div class="action-evidence">
+          <div class="action-ev-item">自由記述「使い方・入口がわからない」カテゴリ<strong> 85件</strong></div>
+          <div class="action-ev-item">「初心者でも質問・相談しやすい場所」を求める<strong> 71名（42%）</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>SHIFT AI Discord アンケート結果レポート — 2026年2月</p>
+  <p style="margin-top:4px">回答数 171名 / 集計・分析：運営チーム</p>
+</footer>
+
+<script>
+
+const TOTAL=171;
+const Q1_DATA=[
+  {label:'とても使いやすい',count:3, color:'#2ecc71'},
+  {label:'まあ使いやすい',  count:28,color:'#57d68f'},
+  {label:'普通',            count:41,color:'#B9BBBE'},
+  {label:'少し使いづらい',  count:61,color:'#F5A623'},
+  {label:'かなり使いづらい',count:38,color:'#ED4245'},
+];
+const Q2_DATA=[
+  {label:'チャンネルが多くて迷った',count:117},
+  {label:'情報が流れて追いづらい',count:93},
+  {label:'どこに投稿・質問すればよいかわからなかった',count:77},
+  {label:'話についていけないと感じた',count:59},
+];
+const Q3_DATA=[
+  {label:'AIの使い道・活用例がまとまって見られる場所',count:120},
+  {label:'仕事を楽にする・自動化の話が見られる場所',count:87},
+  {label:'仕事や現場でのAI活用の話が見られる場所',count:84},
+  {label:'初心者でも質問・相談しやすい場所',count:71},
+  {label:'気軽に雑談できる場所',count:49},
+];
+const Q4_DATA=[
+  {label:'同じ不安や悩みを持つ人同士で話せる',count:106},
+  {label:'同じ仕事・立場の人同士で話せる',count:91},
+  {label:'同じ年齢層の人同士で話せる',count:59},
+  {label:'同じタイミングでSHIFT AIに参加した人同士で話せる',count:55},
+  {label:'同じ出身地の人同士で話せる',count:31},
+];
+const Q5_DATA=[
+  {label:'その他',count:98,color:'#5865F2'},
+  {label:'フリーランス',count:49,color:'#7289DA'},
+  {label:'医療・介護・福祉',count:24,color:'#57F287'},
+  {label:'エンジニア／開発',count:18,color:'#FEE75C'},
+  {label:'教育（教師・教員）',count:18,color:'#F5A623'},
+];
+const Q7_CAT_META=[
+  {key:'A',label:'使い方・入口がわからない',count:85,color:'#5865F2'},
+  {key:'B',label:'チャンネル・構造の複雑さ',count:42,color:'#7289DA'},
+  {key:'C',label:'情報が流れる・探せない',count:23,color:'#F5A623'},
+  {key:'E',label:'通知・設定系',count:17,color:'#FEE75C'},
+  {key:'D',label:'話についていけない・参加しにくい',count:13,color:'#ED4245'},
+];
+const Q7_REP={
+  A:[
+    {name:'happyyibukichan',text:'ごちゃごちゃしていてわかりにくい。'},
+    {name:'Mai',text:'入会したての人がDiscordのどこからどのような流れで使っていくかのルートがあれば嬉しいです。'},
+    {name:'m',text:'どこをみていいかわからない'},
+  ],
+  B:[
+    {name:'ショウ',text:'チャンネルが多すぎて迷う'},
+    {name:'shimajima',text:'チャンネルが多いですね、とにかくw'},
+    {name:'いち',text:'週報の投稿の仕方が分かりづらい'},
+  ],
+  C:[
+    {name:'🐈みちよ🐈',text:'欲しい情報を探し出すのに、情報が流れてしまっていて見つけづらい'},
+    {name:'いけP AIと人間の仲介者',text:'流れていくのが早くて遡るのが大変なところはあります。'},
+    {name:'まーさ🙂',text:'イベントスケジュールなどが検索できたらいいです'},
+  ],
+  D:[
+    {name:'きなみ',text:'すでにスキルをお持ちの方ばかりの気がして、交流するのに勇気がいります'},
+    {name:'yu_ko',text:'会員同士の交流がもっと出来ればいいな'},
+    {name:'ダン',text:'コミュニティの人数が多い割にアクティブユーザーが少なくて、活発な情報交換ができず、そもそもDiscordでコミュニティを作る意義があるのか疑問です。'},
+  ],
+  E:[
+    {name:'FRED',text:'通知頻度を週2回などに減らして欲しい'},
+    {name:'あいむ',text:'通知が多くて追いつけない'},
+    {name:'creator hyde',text:'新しい通知が来てもわからない'},
+  ],
+};
+
+</script>
+<script>
+const Q7_CAT_LISTS={"A": [{"name": "ぐろ", "q1": "普通", "text": "どうしてもSlackの感覚で使おうとしてしまうので、スレッドが見づらいのと、検索の使いづらさを感じてしまいます。慣れてないだけで、実は便利なショートカットとかもあるのかもしれませんが。"}, {"name": "たっきー", "q1": "普通", "text": "チャンネルが探しづらいので、簡単に検索できる機能があれば教えて欲しい。"}, {"name": "和子", "q1": "かなり使いづらい", "text": "使い方がまだわかっていない。\n情報が流れてしまうこともある。\nアーカイブはなんとなくわかってきた感じ。\n書くのに戸惑う時がある。"}, {"name": "Mai", "q1": "普通", "text": "SHIFTAIのスタートガイド動画のように、入会したての人がDiscordnoどこからどのような流れで使っていくかのルートがあれば嬉しいです。"}, {"name": "mille", "q1": "少し使いづらい", "text": "・項目が多すぎて見たい内容がどこにあるのか慣れるまでわかりにくい。\n・個人的には不明点の質問以外に会員同士の交流を活用しないので、もう少しシンプルな構成だと見やすいのかなと思います。"}, {"name": "Hitoshi", "q1": "普通", "text": "今の使い方で違和感なく満足しています！ありがとうございます！"}, {"name": "creator hyde", "q1": "かなり使いづらい", "text": "新しい通知が来てもわからない"}, {"name": "🐈みちよ🐈", "q1": "少し使いづらい", "text": "欲しい情報を探し出すのに、情報が流れてしまっていて見つけづらい"}, {"name": "SAYURI", "q1": "少し使いづらい", "text": "ウェビナー限定部屋などに入る際案内のURLが流れてしまって入れないと困った事がある"}, {"name": "こた", "q1": "まあ使いやすい", "text": "どうやってDiscordを活用したらいいか順番がわからなかった"}, {"name": "とよもと", "q1": "少し使いづらい", "text": "似た名前のチャンネル？があったりして迷子になる"}, {"name": "SHIFT AI運営", "q1": "少し使いづらい", "text": "チャンネル名が同じようなところが多くわかりにくい"}, {"name": "Hiroshi", "q1": "少し使いづらい", "text": "膨大な情報があるが、私のような初心者には分類が煩雑で、明快でない印象です。常に行きたい場所を探すのに時間がかかります。"}, {"name": "さき", "q1": "少し使いづらい", "text": "まだよく理解できていないので、何が分からないか分からない状態です。"}, {"name": "izumi", "q1": "かなり使いづらい", "text": "昨年3月から入っていて初心者ではないけど、今更ながら自己紹介もしにくい。AIツールごとに質問できる場所が欲しいです。"}, {"name": "のん", "q1": "かなり使いづらい", "text": "わからなすぎて、ほとんど見ていません。discordにアレルギー反応を起こしている感じです。"}, {"name": "ちびたれにゃん", "q1": "かなり使いづらい", "text": "使い方が　まだわかっていません"}, {"name": "suzuasu", "q1": "普通", "text": "初めはとまでいましたが、今は慣れました"}, {"name": "フクシマ", "q1": "普通", "text": "（自分が必要というわけではないが）初心者が質問できる場所と的確な質問方法を分かりやすくした方が良い。\n質問の仕方が悪く、回答が得られなかったり、間違った回答が返ってくることになるし、\n質問相談スレはあくまで受講者同士のアドバイスがメイン（運営や講師レベルの人の回答ではない）、ということが分からない人がほとんどだと思う。\n例えば契約関係など運営に関する重要事項を質問して、満足いく回答がされずにクレームになる恐れもあると思う。問い合わせの入口がどこなのか分からない人も多そう。"}, {"name": "Saya", "q1": "かなり使いづらい", "text": "まだ使えてないので分からないのですが、操作自体もわかりづらいと感じてます"}, {"name": "ようこ", "q1": "かなり使いづらい", "text": "自分が何をコメントしたかがわからない"}, {"name": "よしひろ", "q1": "少し使いづらい", "text": "最初はコメントへの返信の仕方がわからなかった。"}, {"name": "みろりん", "q1": "少し使いづらい", "text": "全くの素人には本人プロフィールの設定がわからなかったです。"}, {"name": "YUKI", "q1": "普通", "text": "参加したばかりでわからないことだらけでそもそもついていけない感じです。\n初心者ようのガイドラインみたいなものがもう少しわかりやすいと嬉しいです"}, {"name": "しゅんじろう", "q1": "普通", "text": "①どこに質問したらよいのかに一番困った\nまた回答者が生徒さんから頂き本当に正しいのか？が判別しにくいケースがある\n→改善案としてワークフローを用意して質問をすると、適切なチャンネルに投稿され、関連知識がある方にメンションが行く仕組みがあればどうでしょうか？\n\n\n②なんのチャンネルか(目的)がすぐにわからない\n※記載していただいてる？"}, {"name": "happyyibukichan", "q1": "かなり使いづらい", "text": "ごちゃごちゃしていてわかりにくい。"}, {"name": "Uchiko", "q1": "かなり使いづらい", "text": "成果報告の場所がわかりません。どこに投稿すればよいでしょうか？\n\nチャットの送信数が多くて、自分がどこまで見ていたかわからないです。\n\n地域ごとに分かれているチャットがありましたが、すでに話が進んでいて途中から入りづらいです。"}, {"name": "djyoshiki", "q1": "まあ使いやすい", "text": "使い慣れるまでは文字数が多く、少し疲れる印象"}, {"name": "eri", "q1": "かなり使いづらい", "text": "ディスコード自体の使い方がよくわからない上に、いろんな項目があって何がなんだかよくわからないです。"}, {"name": "森川栄太郎　拉麺森川", "q1": "少し使いづらい", "text": "1.字が小さい\n2.ジャンル分けが一目瞭然ではない\n3.全体像が見えづらい\n4.どのチャンネルが新規なのかわかりづらい\n5.隠れているジャンルがある気がする"}, {"name": "ryouken", "q1": "少し使いづらい", "text": "どのカテゴリが自分に必要なのかわからない"}, {"name": "ゴン太くん", "q1": "少し使いづらい", "text": "左側のツリーの構造がわかりにくく、どこに何の情報があるか、全体像がつかみにくいです。"}, {"name": "Kurrumi55", "q1": "少し使いづらい", "text": "どこに何があるのか探すのに時間がかかるので使いにくいと思いついつい書き込みをせず、見るだけになってしまいます"}, {"name": "ハルフィン", "q1": "普通", "text": "まだどういうふうに使ったらいいかわからない。通知きたらとりあえずみて終わり。必要な情報はみるけどそれっきり"}, {"name": "sally20231225", "q1": "まあ使いやすい", "text": "学習が追い付いていないのですが、アーカイブを追っかけて実際の自AIを使えている人の実例が簡単に見れたらうれしい（部屋があるかもですが、文字を追いかけるのが難しい）"}, {"name": "しらかた", "q1": "少し使いづらい", "text": "ウェビナー・合宿からの案内がわかりやすいように事前案内が欲しい（ウェビナーから急にステージの案内などあり江氏自身も戸惑っていらっしゃったようなので"}, {"name": "nonbiri_coara", "q1": "まあ使いやすい", "text": "今まで使用していたメニューとのカテゴリー名の違い。\nどこに何があるか把握するまでに時間がかかった。"}, {"name": "由香", "q1": "まあ使いやすい", "text": "ウェビナーに参加できない事象が起きた時にどこに相談すれば解決できるか分からなかった"}, {"name": "こゆり", "q1": "かなり使いづらい", "text": "自分がコメントを入れたところの探し方すら分からない。きっとやり方があると思うが。他の人がコメントしたところへも飛べるのか疑問。"}, {"name": "わっか太郎山", "q1": "かなり使いづらい", "text": "入会したばかりですが、どこをみたらよあのか、ここだけは見るべきなど、ちんぷんかんぷんで、全く活用できていません。質問もどこですくべきなのか、わかりません"}, {"name": "チャッピー", "q1": "まあ使いやすい", "text": "受講している講座を途中でサイトから離脱した際に再度サイトにログインして最初から受講中の講座まで探しに行くのが面倒。なったらいいなのイメージがUdemy講座の様なUI？だと使いやすそう！"}, {"name": "VamTu", "q1": "まあ使いやすい", "text": "チャンネルが多く見ていくだけでも大変だったのと通知が来た時にどこから通知が来てるかわかりづらかった（これはディスコードのせいかも）なれていきたい"}, {"name": "Naoki", "q1": "少し使いづらい", "text": "最初から表示されているチャンネルが多くて迷いました。最初は初心者交流ルームだけ表示し、動画視聴やレベルアップなどの条件で少しずつチャンネルが開放されていくと迷いにくいのかなと思いました。また、目的のチャンネルがあるユーザーにはロールを追加してもらう形であれば、自分で情報を絞らなくても必要な知識を取捨しやすいかもしれません。"}, {"name": "Takeuchi", "q1": "少し使いづらい", "text": "チャンネル数が多くて迷ってしまいました。\n慣れれば何とかなるかな？とも思っています。"}, {"name": "チャコ", "q1": "少し使いづらい", "text": "とにかく初心者中の初心者でわからな過ぎるので、シンプルな表示をお願いします。\nお手数おかけしてすみません。"}, {"name": "TOBUWO", "q1": "少し使いづらい", "text": "自分の問題ですが、上手く使いこなせていない。情報が流れてしまいタイムリーに取得できていない。"}, {"name": "miki", "q1": "少し使いづらい", "text": "チャンネルが多すぎるけど、知らないチャンネルもあったりして、難しい。あと、1つのチャンネルも情報量が多すぎて、追いかけるだけで精一杯になったり、満足してしまい、アウトプットするまで行けないことが多い。イベントも見落とすことも増えてしまったので、LINEで全部お知らせしてほしい。"}, {"name": "ちばとも", "q1": "少し使いづらい", "text": "チャンネルが多くて、どこを見たらよいかわからなくなる。結果見なくなる。\n最低限チェックしておけばいいチャンネルを、会員のバックグラウンドや目的ごとに教えてもらえたら嬉しい。"}, {"name": "morizo110", "q1": "普通", "text": "慣れが必要だと感じた"}, {"name": "pinkberrycat", "q1": "かなり使いづらい", "text": "慣れの問題かもわかりませんが、メッセージや内容が時系列に大量に見ないといけないのが、使い方としてよくわからない点です。情報が多いので、目的がはっきりしていないと使おうという感じにはならないのが現状です。本当はいろいろ駆使して交流したいのですが、そもそもの画面の捉え方、活用の仕方がわからずアクセスしてしまっている感じです。"}, {"name": "ai_ai_ai", "q1": "普通", "text": "「盛り上がっているスレッドがどこにあるのか分からなくなる。通知が来ないと埋もれてしまい、後から追いかけるのが大変。」"}, {"name": "m", "q1": "かなり使いづらい", "text": "どこをみていいかわからない"}, {"name": "とど🦭", "q1": "かなり使いづらい", "text": "画面がちょこちょこ変わるので、自分がどこを通って来たかわからなくなる"}, {"name": "ムーンフォレスト", "q1": "まあ使いやすい", "text": "慣れるまでカテゴリーが多くて迷っていた。"}, {"name": "羊が二匹", "q1": "まあ使いやすい", "text": "チャンネルが豊富なのはありがたいですが、入学したてで迷子になりました。"}, {"name": "masa", "q1": "かなり使いづらい", "text": "まず、説明が下手！わかりやすく記載すべき。誰もが理解しづらいと思っていますよ。"}, {"name": "AI Antares", "q1": "かなり使いづらい", "text": "探したい情報が簡単に探せない。"}, {"name": "さやこ", "q1": "少し使いづらい", "text": "・スレッドがわかりづらい\n・スレッド内でどんなトピックが話し合われているかを見つけづらい\n・質問と回答が離れていて探さないといけないので、分かりづらい"}, {"name": "内藤義人", "q1": "少し使いづらい", "text": "どこで何を話してるかわからないので、わかりやすくなると嬉しい"}, {"name": "ししょう🍀", "q1": "かなり使いづらい", "text": "今日が初めてなので、初めての方はこちら　みたいなガイドがほしいです"}, {"name": "Nアリス", "q1": "少し使いづらい", "text": "使い慣れていないので書き込む場所がわからなかった。だんだん慣れて行けるようになりたいです。"}, {"name": "Yoshimoto", "q1": "少し使いづらい", "text": "見ることはできますが、有益な使い方自体がよく分からない。"}, {"name": "mizuno", "q1": "とても使いやすい", "text": "チャンネルが多いので検索やブックマークの使い方の手順の配布があるといいなと思います。"}, {"name": "ゆー", "q1": "普通", "text": "情報が多くて把握しきれない"}, {"name": "ぷーさん！", "q1": "少し使いづらい", "text": "まだ何がわからないかよく分からない"}, {"name": "Akane", "q1": "かなり使いづらい", "text": "どこに何があるのかわからなくなる。使い方の動画みたがやはりわからない。"}, {"name": "MAMI", "q1": "かなり使いづらい", "text": "何から始めればいいかわからない"}, {"name": "美茜", "q1": "まあ使いやすい", "text": "Discord初心者にはどこに質問をしていいかわからず質問がしづらい"}, {"name": "fuu", "q1": "普通", "text": "何度かバージョンアップしてる検索バー　やっぱり思ったものが出てこない　使い方が悪いのかな。この前見れなかったアーカイブみようと思って検索しても出ないから、アーカイブのランを遡ってみる感じ\n時間がある時に、すぐ見れるようにできれば嬉しい"}, {"name": "むらさきあい", "q1": "普通", "text": "わかりづらいことはないのですが、投稿が多く追いつかない。\nデジタルデトックスする時間があまりない。\nこれは、Discordに限らないのですが💦"}, {"name": "Kozy", "q1": "かなり使いづらい", "text": "どこに何があるのか分かりにくいので、色などで分かりやすく区分してほしい。"}, {"name": "KaoTake", "q1": "まあ使いやすい", "text": "アプリ操作が慣れない"}, {"name": "PBD♥Nicky", "q1": "少し使いづらい", "text": "人それぞれ使い方が違うので、活用例のチャンネルがとても好みです。ここが充実すると、使いこなし方のイメージが掴みやすいと感じます。"}, {"name": "あったかぽっけ", "q1": "まあ使いやすい", "text": "わかりやすく分類されているが、探しに行く方法、その項目の説明（インデックス）がほしい。ガイドは何をガイドしてるの？、通知チャンネル？"}, {"name": "茶太郎", "q1": "かなり使いづらい", "text": "どこに何の情報があるのかわからない\n部屋が多すぎる\nチャットが増えると重要な情報が流れて、追っていくのが大変"}, {"name": "Tatsuo Sato", "q1": "普通", "text": "まだ使えているという感じを持てていません。"}, {"name": "ばむ", "q1": "普通", "text": "情報収集や皆様の会話ログを見ることができ、非常に参考になります。しかし、使い方を把握してない・学習不足もあり、どの程度の不安内容から相談してもよいのか、など考えてしまします。例えば、私は専業主婦ですが、AIイラストを活用しSNS発信や副業案件応募に挑戦したいと思うのですが、特にSNS発信のための情報収集に不安を感じています。子育て中で、あまり的あった時間が取れないのが現状で、メッセージのやり取りで相談できるとうれしいです。"}, {"name": "SHIFT AI運営｜さゆっち", "q1": "まあ使いやすい", "text": "よくわからない"}, {"name": "つくし", "q1": "少し使いづらい", "text": "まだ慣れないので使いにくいのですが、投稿の続きを送れたり、出来なかったり、使用をもっと詳しく教えてもらうると嬉しいです。"}, {"name": "mkc", "q1": "少し使いづらい", "text": "アクションノートの記入欄(フォーマット)が探しづらかった"}, {"name": "OSEI", "q1": "少し使いづらい", "text": "情報のありかがわかりにくい"}, {"name": "Lovelybetan", "q1": "かなり使いづらい", "text": "そもそもディスコードにたどり着けなかった場合の解決場所をまず作ってほしい。ユーザーガイドを最初に案内してほしい。これがないと途方にくれるので。"}, {"name": "ともこ", "q1": "普通", "text": "自分がDiscordに慣れていないので、まだ少しわかりづらい部分があります。\n使いこなすぞー"}, {"name": "YOKO.U", "q1": "少し使いづらい", "text": "きっと慣れたら便利なんだろうなと思っています。"}, {"name": "なびたか", "q1": "少し使いづらい", "text": "まだしっかり使いこなせていない"}], "B": [{"name": "ぐろ", "q1": "普通", "text": "どうしてもSlackの感覚で使おうとしてしまうので、スレッドが見づらいのと、検索の使いづらさを感じてしまいます。慣れてないだけで、実は便利なショートカットとかもあるのかもしれませんが。"}, {"name": "いち", "q1": "普通", "text": "週報の投稿の仕方が分かりづらい"}, {"name": "たっきー", "q1": "普通", "text": "チャンネルが探しづらいので、簡単に検索できる機能があれば教えて欲しい。"}, {"name": "mille", "q1": "少し使いづらい", "text": "・項目が多すぎて見たい内容がどこにあるのか慣れるまでわかりにくい。\n・個人的には不明点の質問以外に会員同士の交流を活用しないので、もう少しシンプルな構成だと見やすいのかなと思います。"}, {"name": "とよもと", "q1": "少し使いづらい", "text": "似た名前のチャンネル？があったりして迷子になる"}, {"name": "SHIFT AI運営", "q1": "少し使いづらい", "text": "チャンネル名が同じようなところが多くわかりにくい"}, {"name": "Hiroshi", "q1": "少し使いづらい", "text": "膨大な情報があるが、私のような初心者には分類が煩雑で、明快でない印象です。常に行きたい場所を探すのに時間がかかります。"}, {"name": "はとりん", "q1": "少し使いづらい", "text": "Archiveでウェビナーを見ることが多いので、Archiveできましたよチャンネルがあってほしい。ここを見ればArchiveされたかどうか分かるところ。"}, {"name": "よっくん😊", "q1": "少し使いづらい", "text": "〇〇について知りたい　と質問したら、必要なチャンネルを示してくれる。\n仕事が忙しく、まとまった時間を取りにくいので、ピンポイントで情報を知ることが出来ると良いなって思いました😃"}, {"name": "しゅんじろう", "q1": "普通", "text": "①どこに質問したらよいのかに一番困った\nまた回答者が生徒さんから頂き本当に正しいのか？が判別しにくいケースがある\n→改善案としてワークフローを用意して質問をすると、適切なチャンネルに投稿され、関連知識がある方にメンションが行く仕組みがあればどうでしょうか？\n\n\n②なんのチャンネルか(目的)がすぐにわからない\n※記載していただいてる？"}, {"name": "tunk764", "q1": "普通", "text": "目次、検索があると良い！"}, {"name": "森川栄太郎　拉麺森川", "q1": "少し使いづらい", "text": "1.字が小さい\n2.ジャンル分けが一目瞭然ではない\n3.全体像が見えづらい\n4.どのチャンネルが新規なのかわかりづらい\n5.隠れているジャンルがある気がする"}, {"name": "ryouken", "q1": "少し使いづらい", "text": "どのカテゴリが自分に必要なのかわからない"}, {"name": "ゴン太くん", "q1": "少し使いづらい", "text": "左側のツリーの構造がわかりにくく、どこに何の情報があるか、全体像がつかみにくいです。"}, {"name": "あっきー", "q1": "まあ使いやすい", "text": "チャンネルが多くて迷う感じはあった"}, {"name": "nonbiri_coara", "q1": "まあ使いやすい", "text": "今まで使用していたメニューとのカテゴリー名の違い。\nどこに何があるか把握するまでに時間がかかった。"}, {"name": "VamTu", "q1": "まあ使いやすい", "text": "チャンネルが多く見ていくだけでも大変だったのと通知が来た時にどこから通知が来てるかわかりづらかった（これはディスコードのせいかも）なれていきたい"}, {"name": "shimajima", "q1": "少し使いづらい", "text": "チャンネルが多いですね、とにかくｗ"}, {"name": "Naoki", "q1": "少し使いづらい", "text": "最初から表示されているチャンネルが多くて迷いました。最初は初心者交流ルームだけ表示し、動画視聴やレベルアップなどの条件で少しずつチャンネルが開放されていくと迷いにくいのかなと思いました。また、目的のチャンネルがあるユーザーにはロールを追加してもらう形であれば、自分で情報を絞らなくても必要な知識を取捨しやすいかもしれません。"}, {"name": "Takeuchi", "q1": "少し使いづらい", "text": "チャンネル数が多くて迷ってしまいました。\n慣れれば何とかなるかな？とも思っています。"}, {"name": "あんざいさん", "q1": "まあ使いやすい", "text": "音楽関連のチャンネル(アウトプットルーム，相談・意見交換などの場，音楽でマネタイズする手段など)がほしい(既にあるのならばどこでしょう？)"}, {"name": "miki", "q1": "少し使いづらい", "text": "チャンネルが多すぎるけど、知らないチャンネルもあったりして、難しい。あと、1つのチャンネルも情報量が多すぎて、追いかけるだけで精一杯になったり、満足してしまい、アウトプットするまで行けないことが多い。イベントも見落とすことも増えてしまったので、LINEで全部お知らせしてほしい。"}, {"name": "ちばとも", "q1": "少し使いづらい", "text": "チャンネルが多くて、どこを見たらよいかわからなくなる。結果見なくなる。\n最低限チェックしておけばいいチャンネルを、会員のバックグラウンドや目的ごとに教えてもらえたら嬉しい。"}, {"name": "たきあや", "q1": "普通", "text": "スレッドの返信が少なくて寂しいので、もっと気軽に発言できる雰囲気ならいいな"}, {"name": "masafil310", "q1": "普通", "text": "（すでに存在している場合はすみませんが、）生成AIの種類毎のチャンネルがあれば色々話しやすそう。"}, {"name": "ai_ai_ai", "q1": "普通", "text": "「盛り上がっているスレッドがどこにあるのか分からなくなる。通知が来ないと埋もれてしまい、後から追いかけるのが大変。」"}, {"name": "あんずりんこ", "q1": "少し使いづらい", "text": "大勢の中でのチャットがしにくい、チャンネルがたくさんあって全部見切れない、情報が多いから見切れない"}, {"name": "ムーンフォレスト", "q1": "まあ使いやすい", "text": "慣れるまでカテゴリーが多くて迷っていた。"}, {"name": "羊が二匹", "q1": "まあ使いやすい", "text": "チャンネルが豊富なのはありがたいですが、入学したてで迷子になりました。"}, {"name": "ミソスープ", "q1": "普通", "text": "チャンネルが多くて、困っている事"}, {"name": "さやこ", "q1": "少し使いづらい", "text": "・スレッドがわかりづらい\n・スレッド内でどんなトピックが話し合われているかを見つけづらい\n・質問と回答が離れていて探さないといけないので、分かりづらい"}, {"name": "mizuno", "q1": "とても使いやすい", "text": "チャンネルが多いので検索やブックマークの使い方の手順の配布があるといいなと思います。"}, {"name": "Hiro", "q1": "少し使いづらい", "text": "チャンネルが多くて切り替えてチェックするのが面倒"}, {"name": "しおさん", "q1": "かなり使いづらい", "text": "カテゴリが多すぎ且つ内容が被っている部屋もあり。"}, {"name": "のん", "q1": "普通", "text": "見たいアーカイブやプレゼントの情報が流れてきた時に、「お気に入り」マークをつけたり「後で見る」フォルダに振り分けて\n後からすぐ見れる状態にできると嬉しいです。\n\nもしくは会員サイト内で\n自分の「お気に入り」や「後で見る」にチェックをつけられるようにできると嬉しい。\n\n情報が多いので、自分の必要なものに印をつけて、後からすぐ見れる状態が作れるとありがたいです。"}, {"name": "ふくみー", "q1": "普通", "text": "一定期間を過ぎたら、チャンネル(スレッド？)が見つかりにくいところ"}, {"name": "PBD♥Nicky", "q1": "少し使いづらい", "text": "人それぞれ使い方が違うので、活用例のチャンネルがとても好みです。ここが充実すると、使いこなし方のイメージが掴みやすいと感じます。"}, {"name": "ショウ", "q1": "かなり使いづらい", "text": "チャンネルが多すぎて迷う"}, {"name": "あったかぽっけ", "q1": "まあ使いやすい", "text": "わかりやすく分類されているが、探しに行く方法、その項目の説明（インデックス）がほしい。ガイドは何をガイドしてるの？、通知チャンネル？"}, {"name": "SHIFT AI運営｜石井知子/ともっち", "q1": "少し使いづらい", "text": "以前、すべてのチャンネルを表示のチェックを外したことがあったが、そしたら新規で登録したチャンネルが表示されず、結局またレ点を付けることにしました。\nこの課題がクリアになりつつあまり使用しないチャンネルは非表示設定ができたら嬉しいです。"}, {"name": "茶太郎", "q1": "かなり使いづらい", "text": "どこに何の情報があるのかわからない\n部屋が多すぎる\nチャットが増えると重要な情報が流れて、追っていくのが大変"}, {"name": "Hayato T", "q1": "まあ使いやすい", "text": "チャンネル数が少し多い所が分かりづらかった"}], "C": [{"name": "ぐろ", "q1": "普通", "text": "どうしてもSlackの感覚で使おうとしてしまうので、スレッドが見づらいのと、検索の使いづらさを感じてしまいます。慣れてないだけで、実は便利なショートカットとかもあるのかもしれませんが。"}, {"name": "たっきー", "q1": "普通", "text": "チャンネルが探しづらいので、簡単に検索できる機能があれば教えて欲しい。"}, {"name": "和子", "q1": "かなり使いづらい", "text": "使い方がまだわかっていない。\n情報が流れてしまうこともある。\nアーカイブはなんとなくわかってきた感じ。\n書くのに戸惑う時がある。"}, {"name": "Mai", "q1": "普通", "text": "SHIFTAIのスタートガイド動画のように、入会したての人がDiscordnoどこからどのような流れで使っていくかのルートがあれば嬉しいです。"}, {"name": "🐈みちよ🐈", "q1": "少し使いづらい", "text": "欲しい情報を探し出すのに、情報が流れてしまっていて見つけづらい"}, {"name": "SAYURI", "q1": "少し使いづらい", "text": "ウェビナー限定部屋などに入る際案内のURLが流れてしまって入れないと困った事がある"}, {"name": "Mune", "q1": "少し使いづらい", "text": "facebookグループを使用していたときは、過去の投稿が、少なくとも自分のタイムライン上で管理できたのに対して、Discordだと、チャットの流れに流されてしまう。\n\nDiscordになって、リアルタイムのコミュニケーションが取りやすくなったというよりも、自分の中では、リアルタイムでないとコミュニケーションが取れなくなったという印象の方が強い。"}, {"name": "tunk764", "q1": "普通", "text": "目次、検索があると良い！"}, {"name": "sally20231225", "q1": "まあ使いやすい", "text": "学習が追い付いていないのですが、アーカイブを追っかけて実際の自AIを使えている人の実例が簡単に見れたらうれしい（部屋があるかもですが、文字を追いかけるのが難しい）"}, {"name": "いけP AIと人間の仲介者", "q1": "まあ使いやすい", "text": "流れていくのが早くて遡るのが大変なところはあります。"}, {"name": "チャッピー", "q1": "まあ使いやすい", "text": "受講している講座を途中でサイトから離脱した際に再度サイトにログインして最初から受講中の講座まで探しに行くのが面倒。なったらいいなのイメージがUdemy講座の様なUI？だと使いやすそう！"}, {"name": "TOBUWO", "q1": "少し使いづらい", "text": "自分の問題ですが、上手く使いこなせていない。情報が流れてしまいタイムリーに取得できていない。"}, {"name": "miki", "q1": "少し使いづらい", "text": "チャンネルが多すぎるけど、知らないチャンネルもあったりして、難しい。あと、1つのチャンネルも情報量が多すぎて、追いかけるだけで精一杯になったり、満足してしまい、アウトプットするまで行けないことが多い。イベントも見落とすことも増えてしまったので、LINEで全部お知らせしてほしい。"}, {"name": "ai_ai_ai", "q1": "普通", "text": "「盛り上がっているスレッドがどこにあるのか分からなくなる。通知が来ないと埋もれてしまい、後から追いかけるのが大変。」"}, {"name": "AI Antares", "q1": "かなり使いづらい", "text": "探したい情報が簡単に探せない。"}, {"name": "mizuno", "q1": "とても使いやすい", "text": "チャンネルが多いので検索やブックマークの使い方の手順の配布があるといいなと思います。"}, {"name": "のん", "q1": "普通", "text": "見たいアーカイブやプレゼントの情報が流れてきた時に、「お気に入り」マークをつけたり「後で見る」フォルダに振り分けて\n後からすぐ見れる状態にできると嬉しいです。\n\nもしくは会員サイト内で\n自分の「お気に入り」や「後で見る」にチェックをつけられるようにできると嬉しい。\n\n情報が多いので、自分の必要なものに印をつけて、後からすぐ見れる状態が作れるとありがたいです。"}, {"name": "fuu", "q1": "普通", "text": "何度かバージョンアップしてる検索バー　やっぱり思ったものが出てこない　使い方が悪いのかな。この前見れなかったアーカイブみようと思って検索しても出ないから、アーカイブのランを遡ってみる感じ\n時間がある時に、すぐ見れるようにできれば嬉しい"}, {"name": "まーさ🙂", "q1": "とても使いやすい", "text": "イベントスケジュールなどが検索できたらいいです"}, {"name": "ふくみー", "q1": "普通", "text": "一定期間を過ぎたら、チャンネル(スレッド？)が見つかりにくいところ"}, {"name": "茶太郎", "q1": "かなり使いづらい", "text": "どこに何の情報があるのかわからない\n部屋が多すぎる\nチャットが増えると重要な情報が流れて、追っていくのが大変"}, {"name": "tomotomo2020", "q1": "普通", "text": "あるのかもしれませんが、情報や知りたい事を調べるところ？検索できるような機能が欲しいです。"}, {"name": "ばむ", "q1": "普通", "text": "情報収集や皆様の会話ログを見ることができ、非常に参考になります。しかし、使い方を把握してない・学習不足もあり、どの程度の不安内容から相談してもよいのか、など考えてしまします。例えば、私は専業主婦ですが、AIイラストを活用しSNS発信や副業案件応募に挑戦したいと思うのですが、特にSNS発信のための情報収集に不安を感じています。子育て中で、あまり的あった時間が取れないのが現状で、メッセージのやり取りで相談できるとうれしいです。"}], "D": [{"name": "mille", "q1": "少し使いづらい", "text": "・項目が多すぎて見たい内容がどこにあるのか慣れるまでわかりにくい。\n・個人的には不明点の質問以外に会員同士の交流を活用しないので、もう少しシンプルな構成だと見やすいのかなと思います。"}, {"name": "yu_ko", "q1": "かなり使いづらい", "text": "会員同士の交流がもっと出来ればいいな"}, {"name": "Mune", "q1": "少し使いづらい", "text": "facebookグループを使用していたときは、過去の投稿が、少なくとも自分のタイムライン上で管理できたのに対して、Discordだと、チャットの流れに流されてしまう。\n\nDiscordになって、リアルタイムのコミュニケーションが取りやすくなったというよりも、自分の中では、リアルタイムでないとコミュニケーションが取れなくなったという印象の方が強い。"}, {"name": "YUKI", "q1": "普通", "text": "参加したばかりでわからないことだらけでそもそもついていけない感じです。\n初心者ようのガイドラインみたいなものがもう少しわかりやすいと嬉しいです"}, {"name": "だいすけ", "q1": "少し使いづらい", "text": "マイクやスピーカーの設定がどこまで及ぶのかが分からず、怖い"}, {"name": "ダン", "q1": "少し使いづらい", "text": "コミュニティの人数が多い割にアクティブユーザーが少なくて活発な情報交換ができず、そもそもDiscordでコミュニティを作る意義があるのか疑問です。"}, {"name": "ミズ", "q1": "少し使いづらい", "text": "時間交代などでコミュニティマネージャーが常駐したらどうか？セミナーに入れない人や宣伝をしだす人、大したスキル、成果もない人が得意げに間違えたことを教えるのを防ぐため"}, {"name": "Naoki", "q1": "少し使いづらい", "text": "最初から表示されているチャンネルが多くて迷いました。最初は初心者交流ルームだけ表示し、動画視聴やレベルアップなどの条件で少しずつチャンネルが開放されていくと迷いにくいのかなと思いました。また、目的のチャンネルがあるユーザーにはロールを追加してもらう形であれば、自分で情報を絞らなくても必要な知識を取捨しやすいかもしれません。"}, {"name": "あかりん", "q1": "少し使いづらい", "text": "交流の場なので、\n実際にオフ会や作業会であったメンバー、合宿で一緒になった人と個別コンタクト取れるようになったら嬉しい。\n\n日報やアンケートなどのアウトプット系が多いが、別にSHIFT AIから何か深く聞きたいと言われたり、内容が採用されたわけでもないし、頑張って感想書いたものもポイント機能がまだ機能していないのでアンケート系のモチベーションが下がってます。\nアンケート回答同月は1つは変えて欲しい。集中して勉強できるときがあっても複数ウェビナーアンケート回答しないほうがいいになってしまうので。(本サイトの件も含めておりすみません、レベルアップとの関連もあるので、、)"}, {"name": "Ryo Sugai", "q1": "かなり使いづらい", "text": "ボイスの交流部屋が活発でない印象、以前の様にイベント形式のZOOMにするか講師の方またはサポートの方に仕切ってもらう方がハードルが下がりそう。事前に告知していただければ参加者は多くなりそうだと思います。"}, {"name": "pinkberrycat", "q1": "かなり使いづらい", "text": "慣れの問題かもわかりませんが、メッセージや内容が時系列に大量に見ないといけないのが、使い方としてよくわからない点です。情報が多いので、目的がはっきりしていないと使おうという感じにはならないのが現状です。本当はいろいろ駆使して交流したいのですが、そもそもの画面の捉え方、活用の仕方がわからずアクセスしてしまっている感じです。"}, {"name": "きなみ", "q1": "かなり使いづらい", "text": "すでにスキルをお持ちの方ばかりの気がして、交流するのに勇気がいります"}, {"name": "🔰カスミ🔰", "q1": "少し使いづらい", "text": "ゼミ毎で交流ルーム・宿題ルームにしたほうが、受講者も見やすく、講師も見やすく使いやすいかと思いました。"}], "E": [{"name": "creator hyde", "q1": "かなり使いづらい", "text": "新しい通知が来てもわからない"}, {"name": "🍖お肉の妖精🍖", "q1": "普通", "text": "通知がありすぎて（自分の設定のせいかも）焦る"}, {"name": "Keiko🌻", "q1": "少し使いづらい", "text": "投稿が多いと追いきれず、結局中を見なくなってしまう。\n\nホーム画面に戻ってアプリを閉じて、次開く時にホーム以外の場所が開かれるため、わざわざホーム画面に戻るのが面倒だと感じた。"}, {"name": "みろりん", "q1": "少し使いづらい", "text": "全くの素人には本人プロフィールの設定がわからなかったです。"}, {"name": "しゅんじろう", "q1": "普通", "text": "①どこに質問したらよいのかに一番困った\nまた回答者が生徒さんから頂き本当に正しいのか？が判別しにくいケースがある\n→改善案としてワークフローを用意して質問をすると、適切なチャンネルに投稿され、関連知識がある方にメンションが行く仕組みがあればどうでしょうか？\n\n\n②なんのチャンネルか(目的)がすぐにわからない\n※記載していただいてる？"}, {"name": "あいむ", "q1": "まあ使いやすい", "text": "通知が多くて追いつけない"}, {"name": "だいすけ", "q1": "少し使いづらい", "text": "マイクやスピーカーの設定がどこまで及ぶのかが分からず、怖い"}, {"name": "ハルフィン", "q1": "普通", "text": "まだどういうふうに使ったらいいかわからない。通知きたらとりあえずみて終わり。必要な情報はみるけどそれっきり"}, {"name": "VamTu", "q1": "まあ使いやすい", "text": "チャンネルが多く見ていくだけでも大変だったのと通知が来た時にどこから通知が来てるかわかりづらかった（これはディスコードのせいかも）なれていきたい"}, {"name": "Datacyon", "q1": "少し使いづらい", "text": "スマホだと見づらい。"}, {"name": "ai_ai_ai", "q1": "普通", "text": "「盛り上がっているスレッドがどこにあるのか分からなくなる。通知が来ないと埋もれてしまい、後から追いかけるのが大変。」"}, {"name": "ヤヒロ", "q1": "かなり使いづらい", "text": "資料のダウンロードなど携帯からのリンクでダウンロードしても、実際に使うのはPCであり、その後の保管や管理、利用が非常に手間。\n\n情報の共有は携帯が便利ではあるが、資料などはPCで使うことを前提としてPCサイトでまとめて欲しい\n\n雑談などで通知が膨れるのがウザい。\n\n重要な情報と更新、アナウンス情報が混在していて非常に見にくい。\n\nディスコは情報通達にとどめ、そのほかはPCに専用サイトを設けて、体系的に見やすくまとめて欲しい。"}, {"name": "トッシー", "q1": "少し使いづらい", "text": "通知が多く、あとで探すのが大変と感じます😂"}, {"name": "KaoTake", "q1": "まあ使いやすい", "text": "アプリ操作が慣れない"}, {"name": "あったかぽっけ", "q1": "まあ使いやすい", "text": "わかりやすく分類されているが、探しに行く方法、その項目の説明（インデックス）がほしい。ガイドは何をガイドしてるの？、通知チャンネル？"}, {"name": "SHIFT AI運営｜石井知子/ともっち", "q1": "少し使いづらい", "text": "以前、すべてのチャンネルを表示のチェックを外したことがあったが、そしたら新規で登録したチャンネルが表示されず、結局またレ点を付けることにしました。\nこの課題がクリアになりつつあまり使用しないチャンネルは非表示設定ができたら嬉しいです。"}, {"name": "FRED", "q1": "かなり使いづらい", "text": "通知頻度を週２回などに減らして欲しい"}]};
+</script>
+<script>
+const ALL_COMMENTS=[{"name": "ぐろ", "q1": "普通", "text": "どうしてもSlackの感覚で使おうとしてしまうので、スレッドが見づらいのと、検索の使いづらさを感じてしまいます。慣れてないだけで、実は便利なショートカットとかもあるのかもしれませんが。"}, {"name": "いち", "q1": "普通", "text": "週報の投稿の仕方が分かりづらい"}, {"name": "たっきー", "q1": "普通", "text": "チャンネルが探しづらいので、簡単に検索できる機能があれば教えて欲しい。"}, {"name": "和子", "q1": "かなり使いづらい", "text": "使い方がまだわかっていない。\n情報が流れてしまうこともある。\nアーカイブはなんとなくわかってきた感じ。\n書くのに戸惑う時がある。"}, {"name": "Mai", "q1": "普通", "text": "SHIFTAIのスタートガイド動画のように、入会したての人がDiscordnoどこからどのような流れで使っていくかのルートがあれば嬉しいです。"}, {"name": "mille", "q1": "少し使いづらい", "text": "・項目が多すぎて見たい内容がどこにあるのか慣れるまでわかりにくい。\n・個人的には不明点の質問以外に会員同士の交流を活用しないので、もう少しシンプルな構成だと見やすいのかなと思います。"}, {"name": "Hitoshi", "q1": "普通", "text": "今の使い方で違和感なく満足しています！ありがとうございます！"}, {"name": "creator hyde", "q1": "かなり使いづらい", "text": "新しい通知が来てもわからない"}, {"name": "🐈みちよ🐈", "q1": "少し使いづらい", "text": "欲しい情報を探し出すのに、情報が流れてしまっていて見つけづらい"}, {"name": "Mia", "q1": "少し使いづらい", "text": "notebookLMやGeminiなどのAI事に質問、参加者が知ってる事を回答出来るお互いが学びになる部屋が欲しい"}, {"name": "SAYURI", "q1": "少し使いづらい", "text": "ウェビナー限定部屋などに入る際案内のURLが流れてしまって入れないと困った事がある"}, {"name": "yosa", "q1": "普通", "text": "全体像が見えにくい"}, {"name": "こた", "q1": "まあ使いやすい", "text": "どうやってDiscordを活用したらいいか順番がわからなかった"}, {"name": "とよもと", "q1": "少し使いづらい", "text": "似た名前のチャンネル？があったりして迷子になる"}, {"name": "yu_ko", "q1": "かなり使いづらい", "text": "会員同士の交流がもっと出来ればいいな"}, {"name": "SHIFT AI運営", "q1": "少し使いづらい", "text": "チャンネル名が同じようなところが多くわかりにくい"}, {"name": "🍖お肉の妖精🍖", "q1": "普通", "text": "通知がありすぎて（自分の設定のせいかも）焦る"}, {"name": "Hiroshi", "q1": "少し使いづらい", "text": "膨大な情報があるが、私のような初心者には分類が煩雑で、明快でない印象です。常に行きたい場所を探すのに時間がかかります。"}, {"name": "さき", "q1": "少し使いづらい", "text": "まだよく理解できていないので、何が分からないか分からない状態です。"}, {"name": "bear", "q1": "かなり使いづらい", "text": "運営側が出したメッセージを拾いにくい。\nクリックするとどこかに飛んだりするのが苦手。\nどこで何を見ればいいのか分からない。\n質問が全員に見られるのが苦手。\n公式ラインみたいに運営側のみと繋がる場所が欲しい。\nLINEのオープンチャットみたいなイメージで抵抗がある。"}, {"name": "izumi", "q1": "かなり使いづらい", "text": "昨年3月から入っていて初心者ではないけど、今更ながら自己紹介もしにくい。AIツールごとに質問できる場所が欲しいです。"}, {"name": "のん", "q1": "かなり使いづらい", "text": "わからなすぎて、ほとんど見ていません。discordにアレルギー反応を起こしている感じです。"}, {"name": "Keiko🌻", "q1": "少し使いづらい", "text": "投稿が多いと追いきれず、結局中を見なくなってしまう。\n\nホーム画面に戻ってアプリを閉じて、次開く時にホーム以外の場所が開かれるため、わざわざホーム画面に戻るのが面倒だと感じた。"}, {"name": "はるりん五郎（大澤春夫）", "q1": "普通", "text": "質問先が分かり難い"}, {"name": "はとりん", "q1": "少し使いづらい", "text": "Archiveでウェビナーを見ることが多いので、Archiveできましたよチャンネルがあってほしい。ここを見ればArchiveされたかどうか分かるところ。"}, {"name": "tetsuya", "q1": "かなり使いづらい", "text": "とにかく全体的に見づらい。\n何を書いてあるのかよく分からない。\n見る気にならない。"}, {"name": "ちびたれにゃん", "q1": "かなり使いづらい", "text": "使い方が　まだわかっていません"}, {"name": "suzuasu", "q1": "普通", "text": "初めはとまでいましたが、今は慣れました"}, {"name": "フクシマ", "q1": "普通", "text": "（自分が必要というわけではないが）初心者が質問できる場所と的確な質問方法を分かりやすくした方が良い。\n質問の仕方が悪く、回答が得られなかったり、間違った回答が返ってくることになるし、\n質問相談スレはあくまで受講者同士のアドバイスがメイン（運営や講師レベルの人の回答ではない）、ということが分からない人がほとんどだと思う。\n例えば契約関係など運営に関する重要事項を質問して、満足いく回答がされずにクレームになる恐れもあると思う。問い合わせの入口がどこなのか分からない人も多そう。"}, {"name": "Saya", "q1": "かなり使いづらい", "text": "まだ使えてないので分からないのですが、操作自体もわかりづらいと感じてます"}, {"name": "sen", "q1": "少し使いづらい", "text": "守秘義務が徹底していて、自分や顧客情報などが漏洩しない保証がある場で相談できると嬉しいです。"}, {"name": "ようこ", "q1": "かなり使いづらい", "text": "自分が何をコメントしたかがわからない"}, {"name": "Mune", "q1": "少し使いづらい", "text": "facebookグループを使用していたときは、過去の投稿が、少なくとも自分のタイムライン上で管理できたのに対して、Discordだと、チャットの流れに流されてしまう。\n\nDiscordになって、リアルタイムのコミュニケーションが取りやすくなったというよりも、自分の中では、リアルタイムでないとコミュニケーションが取れなくなったという印象の方が強い。"}, {"name": "よしひろ", "q1": "少し使いづらい", "text": "最初はコメントへの返信の仕方がわからなかった。"}, {"name": "みろりん", "q1": "少し使いづらい", "text": "全くの素人には本人プロフィールの設定がわからなかったです。"}, {"name": "よっくん😊", "q1": "少し使いづらい", "text": "〇〇について知りたい　と質問したら、必要なチャンネルを示してくれる。\n仕事が忙しく、まとまった時間を取りにくいので、ピンポイントで情報を知ることが出来ると良いなって思いました😃"}, {"name": "YUKI", "q1": "普通", "text": "参加したばかりでわからないことだらけでそもそもついていけない感じです。\n初心者ようのガイドラインみたいなものがもう少しわかりやすいと嬉しいです"}, {"name": "na", "q1": "かなり使いづらい", "text": "全てが分かりづらい"}, {"name": "しゅんじろう", "q1": "普通", "text": "①どこに質問したらよいのかに一番困った\nまた回答者が生徒さんから頂き本当に正しいのか？が判別しにくいケースがある\n→改善案としてワークフローを用意して質問をすると、適切なチャンネルに投稿され、関連知識がある方にメンションが行く仕組みがあればどうでしょうか？\n\n\n②なんのチャンネルか(目的)がすぐにわからない\n※記載していただいてる？"}, {"name": "happyyibukichan", "q1": "かなり使いづらい", "text": "ごちゃごちゃしていてわかりにくい。"}, {"name": "Uchiko", "q1": "かなり使いづらい", "text": "成果報告の場所がわかりません。どこに投稿すればよいでしょうか？\n\nチャットの送信数が多くて、自分がどこまで見ていたかわからないです。\n\n地域ごとに分かれているチャットがありましたが、すでに話が進んでいて途中から入りづらいです。"}, {"name": "moca🌱", "q1": "少し使いづらい", "text": "ブックマーク機能"}, {"name": "tunk764", "q1": "普通", "text": "目次、検索があると良い！"}, {"name": "djyoshiki", "q1": "まあ使いやすい", "text": "使い慣れるまでは文字数が多く、少し疲れる印象"}, {"name": "eri", "q1": "かなり使いづらい", "text": "ディスコード自体の使い方がよくわからない上に、いろんな項目があって何がなんだかよくわからないです。"}, {"name": "あいむ", "q1": "まあ使いやすい", "text": "通知が多くて追いつけない"}, {"name": "森川栄太郎　拉麺森川", "q1": "少し使いづらい", "text": "1.字が小さい\n2.ジャンル分けが一目瞭然ではない\n3.全体像が見えづらい\n4.どのチャンネルが新規なのかわかりづらい\n5.隠れているジャンルがある気がする"}, {"name": "koji", "q1": "普通", "text": "送られてきた内容を確認することが一生懸命でまだ具体的なことが分からないです"}, {"name": "ryouken", "q1": "少し使いづらい", "text": "どのカテゴリが自分に必要なのかわからない"}, {"name": "ゴン太くん", "q1": "少し使いづらい", "text": "左側のツリーの構造がわかりにくく、どこに何の情報があるか、全体像がつかみにくいです。"}, {"name": "Kurrumi55", "q1": "少し使いづらい", "text": "どこに何があるのか探すのに時間がかかるので使いにくいと思いついつい書き込みをせず、見るだけになってしまいます"}, {"name": "だいすけ", "q1": "少し使いづらい", "text": "マイクやスピーカーの設定がどこまで及ぶのかが分からず、怖い"}, {"name": "あっきー", "q1": "まあ使いやすい", "text": "チャンネルが多くて迷う感じはあった"}, {"name": "ハルフィン", "q1": "普通", "text": "まだどういうふうに使ったらいいかわからない。通知きたらとりあえずみて終わり。必要な情報はみるけどそれっきり"}, {"name": "ダン", "q1": "少し使いづらい", "text": "コミュニティの人数が多い割にアクティブユーザーが少なくて活発な情報交換ができず、そもそもDiscordでコミュニティを作る意義があるのか疑問です。"}, {"name": "K.I", "q1": "まあ使いやすい", "text": "現状はなし"}, {"name": "ameri 🌱", "q1": "普通", "text": "執筆したnote共有部屋等があったらいいなぁと思いました。でもみんなが投稿し過ぎて大変なことになりますかね？"}, {"name": "sally20231225", "q1": "まあ使いやすい", "text": "学習が追い付いていないのですが、アーカイブを追っかけて実際の自AIを使えている人の実例が簡単に見れたらうれしい（部屋があるかもですが、文字を追いかけるのが難しい）"}, {"name": "しらかた", "q1": "少し使いづらい", "text": "ウェビナー・合宿からの案内がわかりやすいように事前案内が欲しい（ウェビナーから急にステージの案内などあり江氏自身も戸惑っていらっしゃったようなので"}, {"name": "いけP AIと人間の仲介者", "q1": "まあ使いやすい", "text": "流れていくのが早くて遡るのが大変なところはあります。"}, {"name": "nonbiri_coara", "q1": "まあ使いやすい", "text": "今まで使用していたメニューとのカテゴリー名の違い。\nどこに何があるか把握するまでに時間がかかった。"}, {"name": "由香", "q1": "まあ使いやすい", "text": "ウェビナーに参加できない事象が起きた時にどこに相談すれば解決できるか分からなかった"}, {"name": "ふじっち", "q1": "かなり使いづらい", "text": "アクションノートの書き方がわかりにくかった"}, {"name": "こゆり", "q1": "かなり使いづらい", "text": "自分がコメントを入れたところの探し方すら分からない。きっとやり方があると思うが。他の人がコメントしたところへも飛べるのか疑問。"}, {"name": "わっか太郎山", "q1": "かなり使いづらい", "text": "入会したばかりですが、どこをみたらよあのか、ここだけは見るべきなど、ちんぷんかんぷんで、全く活用できていません。質問もどこですくべきなのか、わかりません"}, {"name": "チャッピー", "q1": "まあ使いやすい", "text": "受講している講座を途中でサイトから離脱した際に再度サイトにログインして最初から受講中の講座まで探しに行くのが面倒。なったらいいなのイメージがUdemy講座の様なUI？だと使いやすそう！"}, {"name": "VamTu", "q1": "まあ使いやすい", "text": "チャンネルが多く見ていくだけでも大変だったのと通知が来た時にどこから通知が来てるかわかりづらかった（これはディスコードのせいかも）なれていきたい"}, {"name": "shimajima", "q1": "少し使いづらい", "text": "チャンネルが多いですね、とにかくｗ"}, {"name": "ミズ", "q1": "少し使いづらい", "text": "時間交代などでコミュニティマネージャーが常駐したらどうか？セミナーに入れない人や宣伝をしだす人、大したスキル、成果もない人が得意げに間違えたことを教えるのを防ぐため"}, {"name": "池田敦子", "q1": "少し使いづらい", "text": "最新情報が上段に上がっていく方がわかりやすい。Discordを開いたタイミングが数日ずれるとスクロールが大きいので。。"}, {"name": "Naoki", "q1": "少し使いづらい", "text": "最初から表示されているチャンネルが多くて迷いました。最初は初心者交流ルームだけ表示し、動画視聴やレベルアップなどの条件で少しずつチャンネルが開放されていくと迷いにくいのかなと思いました。また、目的のチャンネルがあるユーザーにはロールを追加してもらう形であれば、自分で情報を絞らなくても必要な知識を取捨しやすいかもしれません。"}, {"name": "Takeuchi", "q1": "少し使いづらい", "text": "チャンネル数が多くて迷ってしまいました。\n慣れれば何とかなるかな？とも思っています。"}, {"name": "チャコ", "q1": "少し使いづらい", "text": "とにかく初心者中の初心者でわからな過ぎるので、シンプルな表示をお願いします。\nお手数おかけしてすみません。"}, {"name": "にくきゅう", "q1": "普通", "text": "初めて使うものなので、まだよく分かりません"}, {"name": "あんざいさん", "q1": "まあ使いやすい", "text": "音楽関連のチャンネル(アウトプットルーム，相談・意見交換などの場，音楽でマネタイズする手段など)がほしい(既にあるのならばどこでしょう？)"}, {"name": "とこ", "q1": "まあ使いやすい", "text": "特になし"}, {"name": "TOBUWO", "q1": "少し使いづらい", "text": "自分の問題ですが、上手く使いこなせていない。情報が流れてしまいタイムリーに取得できていない。"}, {"name": "miki", "q1": "少し使いづらい", "text": "チャンネルが多すぎるけど、知らないチャンネルもあったりして、難しい。あと、1つのチャンネルも情報量が多すぎて、追いかけるだけで精一杯になったり、満足してしまい、アウトプットするまで行けないことが多い。イベントも見落とすことも増えてしまったので、LINEで全部お知らせしてほしい。"}, {"name": "Datacyon", "q1": "少し使いづらい", "text": "スマホだと見づらい。"}, {"name": "m.m", "q1": "まあ使いやすい", "text": "今の所ない。"}, {"name": "あかりん", "q1": "少し使いづらい", "text": "交流の場なので、\n実際にオフ会や作業会であったメンバー、合宿で一緒になった人と個別コンタクト取れるようになったら嬉しい。\n\n日報やアンケートなどのアウトプット系が多いが、別にSHIFT AIから何か深く聞きたいと言われたり、内容が採用されたわけでもないし、頑張って感想書いたものもポイント機能がまだ機能していないのでアンケート系のモチベーションが下がってます。\nアンケート回答同月は1つは変えて欲しい。集中して勉強できるときがあっても複数ウェビナーアンケート回答しないほうがいいになってしまうので。(本サイトの件も含めておりすみません、レベルアップとの関連もあるので、、)"}, {"name": "ちばとも", "q1": "少し使いづらい", "text": "チャンネルが多くて、どこを見たらよいかわからなくなる。結果見なくなる。\n最低限チェックしておけばいいチャンネルを、会員のバックグラウンドや目的ごとに教えてもらえたら嬉しい。"}, {"name": "Ryo Sugai", "q1": "かなり使いづらい", "text": "ボイスの交流部屋が活発でない印象、以前の様にイベント形式のZOOMにするか講師の方またはサポートの方に仕切ってもらう方がハードルが下がりそう。事前に告知していただければ参加者は多くなりそうだと思います。"}, {"name": "morizo110", "q1": "普通", "text": "慣れが必要だと感じた"}, {"name": "pinkberrycat", "q1": "かなり使いづらい", "text": "慣れの問題かもわかりませんが、メッセージや内容が時系列に大量に見ないといけないのが、使い方としてよくわからない点です。情報が多いので、目的がはっきりしていないと使おうという感じにはならないのが現状です。本当はいろいろ駆使して交流したいのですが、そもそもの画面の捉え方、活用の仕方がわからずアクセスしてしまっている感じです。"}, {"name": "のん", "q1": "まあ使いやすい", "text": "すでにあったらすみません。初めての案件が取れそうなのですが、それについて気軽に相談する場所があったら嬉しいです"}, {"name": "たきあや", "q1": "普通", "text": "スレッドの返信が少なくて寂しいので、もっと気軽に発言できる雰囲気ならいいな"}, {"name": "ゆか/yuka_life_design619", "q1": "少し使いづらい", "text": "今思いうかびません"}, {"name": "きなみ", "q1": "かなり使いづらい", "text": "すでにスキルをお持ちの方ばかりの気がして、交流するのに勇気がいります"}, {"name": "mikinya", "q1": "普通", "text": "とくになし"}, {"name": "masafil310", "q1": "普通", "text": "（すでに存在している場合はすみませんが、）生成AIの種類毎のチャンネルがあれば色々話しやすそう。"}, {"name": "ai_ai_ai", "q1": "普通", "text": "「盛り上がっているスレッドがどこにあるのか分からなくなる。通知が来ないと埋もれてしまい、後から追いかけるのが大変。」"}, {"name": "Yum@", "q1": "かなり使いづらい", "text": "ここに変えたことで何がどう良くなったのか、何のためなのか"}, {"name": "m", "q1": "かなり使いづらい", "text": "どこをみていいかわからない"}, {"name": "とど🦭", "q1": "かなり使いづらい", "text": "画面がちょこちょこ変わるので、自分がどこを通って来たかわからなくなる"}, {"name": "あんずりんこ", "q1": "少し使いづらい", "text": "大勢の中でのチャットがしにくい、チャンネルがたくさんあって全部見切れない、情報が多いから見切れない"}, {"name": "MIKI", "q1": "少し使いづらい", "text": "ウェビナーは基礎、上級、の様にレベルが判ると入りやすい。"}, {"name": "mutang@2015", "q1": "少し使いづらい", "text": "デザインがごちゃごちゃしていて、非常に分かりにくい。"}, {"name": "ムーンフォレスト", "q1": "まあ使いやすい", "text": "慣れるまでカテゴリーが多くて迷っていた。"}, {"name": "やよい", "q1": "少し使いづらい", "text": "文章が苦手なので、なんでも相談室で話ができたらいいなと思った"}, {"name": "羊が二匹", "q1": "まあ使いやすい", "text": "チャンネルが豊富なのはありがたいですが、入学したてで迷子になりました。"}, {"name": "ミソスープ", "q1": "普通", "text": "チャンネルが多くて、困っている事"}, {"name": "masa", "q1": "かなり使いづらい", "text": "まず、説明が下手！わかりやすく記載すべき。誰もが理解しづらいと思っていますよ。"}, {"name": "AI Antares", "q1": "かなり使いづらい", "text": "探したい情報が簡単に探せない。"}, {"name": "さやこ", "q1": "少し使いづらい", "text": "・スレッドがわかりづらい\n・スレッド内でどんなトピックが話し合われているかを見つけづらい\n・質問と回答が離れていて探さないといけないので、分かりづらい"}, {"name": "溝口(みっちー)", "q1": "まあ使いやすい", "text": "今の所特にないです"}, {"name": "内藤義人", "q1": "少し使いづらい", "text": "どこで何を話してるかわからないので、わかりやすくなると嬉しい"}, {"name": "ssmr06", "q1": "かなり使いづらい", "text": "情報が錯綜していて欲しい情報にアクセスしづらい"}, {"name": "キリカたんたろー", "q1": "とても使いやすい", "text": "特になし"}, {"name": "ヤヒロ", "q1": "かなり使いづらい", "text": "資料のダウンロードなど携帯からのリンクでダウンロードしても、実際に使うのはPCであり、その後の保管や管理、利用が非常に手間。\n\n情報の共有は携帯が便利ではあるが、資料などはPCで使うことを前提としてPCサイトでまとめて欲しい\n\n雑談などで通知が膨れるのがウザい。\n\n重要な情報と更新、アナウンス情報が混在していて非常に見にくい。\n\nディスコは情報通達にとどめ、そのほかはPCに専用サイトを設けて、体系的に見やすくまとめて欲しい。"}, {"name": "つっか", "q1": "少し使いづらい", "text": "お知らせが多くて半日みていないと凄いことになってる。必要なものだけ拾えるものがあれば良い"}, {"name": "ししょう🍀", "q1": "かなり使いづらい", "text": "今日が初めてなので、初めての方はこちら　みたいなガイドがほしいです"}, {"name": "Nアリス", "q1": "少し使いづらい", "text": "使い慣れていないので書き込む場所がわからなかった。だんだん慣れて行けるようになりたいです。"}, {"name": "Mayo", "q1": "少し使いづらい", "text": "Discordの使用方法"}, {"name": "ゆーた3002", "q1": "まあ使いやすい", "text": "相談を会話形式でしたい"}, {"name": "Yoshimoto", "q1": "少し使いづらい", "text": "見ることはできますが、有益な使い方自体がよく分からない。"}, {"name": "mizuno", "q1": "とても使いやすい", "text": "チャンネルが多いので検索やブックマークの使い方の手順の配布があるといいなと思います。"}, {"name": "ゆー", "q1": "普通", "text": "情報が多くて把握しきれない"}, {"name": "Hiro", "q1": "少し使いづらい", "text": "チャンネルが多くて切り替えてチェックするのが面倒"}, {"name": "しおさん", "q1": "かなり使いづらい", "text": "カテゴリが多すぎ且つ内容が被っている部屋もあり。"}, {"name": "コイケトシアキ", "q1": "少し使いづらい", "text": "画面数が多い。ライターならライターの教育後の成果をSHIFT-AIの方が診断して欲しい"}, {"name": "chao", "q1": "かなり使いづらい", "text": "はじめたばかりでよく分からない"}, {"name": "SHIFT AI運営｜松本", "q1": "普通", "text": "Xでいう「あとで見返す」や「保存」みたいな機能があったらいいなと思いました。"}, {"name": "ぷーさん！", "q1": "少し使いづらい", "text": "まだ何がわからないかよく分からない"}, {"name": "🔰カスミ🔰", "q1": "少し使いづらい", "text": "ゼミ毎で交流ルーム・宿題ルームにしたほうが、受講者も見やすく、講師も見やすく使いやすいかと思いました。"}, {"name": "つんつんAier", "q1": "普通", "text": "ウェビナーから招待受けて幾つか秘密のパスコード打って登録しましたが、多くなってしまう感じがあります。"}, {"name": "Akane", "q1": "かなり使いづらい", "text": "どこに何があるのかわからなくなる。使い方の動画みたがやはりわからない。"}, {"name": "MAMI", "q1": "かなり使いづらい", "text": "何から始めればいいかわからない"}, {"name": "美茜", "q1": "まあ使いやすい", "text": "Discord初心者にはどこに質問をしていいかわからず質問がしづらい"}, {"name": "TAKA", "q1": "普通", "text": "自分がAIを活用し収益化と将来仕事にするにあたりそれぞれの分野で成果を出している項目などあればと思う"}, {"name": "azul", "q1": "普通", "text": "初めて開いたのでまだおもいつきません。"}, {"name": "武谷　昌則", "q1": "まあ使いやすい", "text": "まだ触りみたいな感じです"}, {"name": "のん", "q1": "普通", "text": "見たいアーカイブやプレゼントの情報が流れてきた時に、「お気に入り」マークをつけたり「後で見る」フォルダに振り分けて\n後からすぐ見れる状態にできると嬉しいです。\n\nもしくは会員サイト内で\n自分の「お気に入り」や「後で見る」にチェックをつけられるようにできると嬉しい。\n\n情報が多いので、自分の必要なものに印をつけて、後からすぐ見れる状態が作れるとありがたいです。"}, {"name": "yura", "q1": "普通", "text": "最初はどこを見たら良いか分かりにくいかったです"}, {"name": "fuu", "q1": "普通", "text": "何度かバージョンアップしてる検索バー　やっぱり思ったものが出てこない　使い方が悪いのかな。この前見れなかったアーカイブみようと思って検索しても出ないから、アーカイブのランを遡ってみる感じ\n時間がある時に、すぐ見れるようにできれば嬉しい"}, {"name": "まーさ🙂", "q1": "とても使いやすい", "text": "イベントスケジュールなどが検索できたらいいです"}, {"name": "むらさきあい", "q1": "普通", "text": "わかりづらいことはないのですが、投稿が多く追いつかない。\nデジタルデトックスする時間があまりない。\nこれは、Discordに限らないのですが💦"}, {"name": "トッシー", "q1": "少し使いづらい", "text": "通知が多く、あとで探すのが大変と感じます😂"}, {"name": "ふくみー", "q1": "普通", "text": "一定期間を過ぎたら、チャンネル(スレッド？)が見つかりにくいところ"}, {"name": "hitomi.S", "q1": "少し使いづらい", "text": "あまり参加できていないので偉そうなことは言えませんが、見づらい。"}, {"name": "Kozy", "q1": "かなり使いづらい", "text": "どこに何があるのか分かりにくいので、色などで分かりやすく区分してほしい。"}, {"name": "KaoTake", "q1": "まあ使いやすい", "text": "アプリ操作が慣れない"}, {"name": "PBD♥Nicky", "q1": "少し使いづらい", "text": "人それぞれ使い方が違うので、活用例のチャンネルがとても好みです。ここが充実すると、使いこなし方のイメージが掴みやすいと感じます。"}, {"name": "ショウ", "q1": "かなり使いづらい", "text": "チャンネルが多すぎて迷う"}, {"name": "あったかぽっけ", "q1": "まあ使いやすい", "text": "わかりやすく分類されているが、探しに行く方法、その項目の説明（インデックス）がほしい。ガイドは何をガイドしてるの？、通知チャンネル？"}, {"name": "SHIFT AI運営｜石井知子/ともっち", "q1": "少し使いづらい", "text": "以前、すべてのチャンネルを表示のチェックを外したことがあったが、そしたら新規で登録したチャンネルが表示されず、結局またレ点を付けることにしました。\nこの課題がクリアになりつつあまり使用しないチャンネルは非表示設定ができたら嬉しいです。"}, {"name": "SHIFT AI運営 ｜Tomoyo", "q1": "少し使いづらい", "text": "特に無し"}, {"name": "林理恵", "q1": "かなり使いづらい", "text": "とにかく使いづらいので、まったく見る気が起こりません。\n今も３２２通たまっているようです。\n情報の多さは何とかする術は持っているつもりですが、とにかくパソコンモニターで見ていても見にくくストレス爆裂になるので、見ないようになりました。\n情報はしっかりキャッチしたいのに、きわめて残念です。"}, {"name": "茶太郎", "q1": "かなり使いづらい", "text": "どこに何の情報があるのかわからない\n部屋が多すぎる\nチャットが増えると重要な情報が流れて、追っていくのが大変"}, {"name": "Ono", "q1": "まあ使いやすい", "text": "ウェビナーの予定は見やすいところに置いて欲しい"}, {"name": "Tatsuo Sato", "q1": "普通", "text": "まだ使えているという感じを持てていません。"}, {"name": "タッキー", "q1": "普通", "text": "特になし"}, {"name": "こじこじ", "q1": "まあ使いやすい", "text": "しばらく開かないまま日数が経つと非表示になる"}, {"name": "tomotomo2020", "q1": "普通", "text": "あるのかもしれませんが、情報や知りたい事を調べるところ？検索できるような機能が欲しいです。"}, {"name": "MN", "q1": "普通", "text": "文字ばかりでしんどい時がある"}, {"name": "Hayato T", "q1": "まあ使いやすい", "text": "チャンネル数が少し多い所が分かりづらかった"}, {"name": "ばむ", "q1": "普通", "text": "情報収集や皆様の会話ログを見ることができ、非常に参考になります。しかし、使い方を把握してない・学習不足もあり、どの程度の不安内容から相談してもよいのか、など考えてしまします。例えば、私は専業主婦ですが、AIイラストを活用しSNS発信や副業案件応募に挑戦したいと思うのですが、特にSNS発信のための情報収集に不安を感じています。子育て中で、あまり的あった時間が取れないのが現状で、メッセージのやり取りで相談できるとうれしいです。"}, {"name": "SHIFT AI運営｜さゆっち", "q1": "まあ使いやすい", "text": "よくわからない"}, {"name": "つくし", "q1": "少し使いづらい", "text": "まだ慣れないので使いにくいのですが、投稿の続きを送れたり、出来なかったり、使用をもっと詳しく教えてもらうると嬉しいです。"}, {"name": "mkc", "q1": "少し使いづらい", "text": "アクションノートの記入欄(フォーマット)が探しづらかった"}, {"name": "hypothermia", "q1": "少し使いづらい", "text": "以前、仕事の募集で興味があり、連絡をしたり募集をしたり前に進む進み方がわからず応募できなかった。また質問する時間帯も、東海岸（アメリカ）で時差があり、早朝などのzoomに参加できません。質問をした後的確なコースを撮りたいと思うも、質問のところまで漕ぎつけづに。。。何も参加できていないのでなんとかしたいと思っています。PS：（子供のアカウントを使っているのでふざけた名前ですみません）"}, {"name": "齊藤 周平（SHU）", "q1": "普通", "text": "特になし"}, {"name": "OSEI", "q1": "少し使いづらい", "text": "情報のありかがわかりにくい"}, {"name": "Junya", "q1": "まあ使いやすい", "text": "項目が沢山あるので、当該項目を探すのに時間がかかった"}, {"name": "Lovelybetan", "q1": "かなり使いづらい", "text": "そもそもディスコードにたどり着けなかった場合の解決場所をまず作ってほしい。ユーザーガイドを最初に案内してほしい。これがないと途方にくれるので。"}, {"name": "FRED", "q1": "かなり使いづらい", "text": "通知頻度を週２回などに減らして欲しい"}, {"name": "ともこ", "q1": "普通", "text": "自分がDiscordに慣れていないので、まだ少しわかりづらい部分があります。\n使いこなすぞー"}, {"name": "YOKO.U", "q1": "少し使いづらい", "text": "きっと慣れたら便利なんだろうなと思っています。"}, {"name": "JUNKO", "q1": "少し使いづらい", "text": "まだ分からない"}, {"name": "a2c", "q1": "普通", "text": "左側のメニュー表示順を、自分でカスタマイズできたら良い。よく見るものは上段へ、ほぼ見ないものは非表示など。"}, {"name": "なびたか", "q1": "少し使いづらい", "text": "まだしっかり使いこなせていない"}];
+</script>
+<script>
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function hi(t,q){
+  if(!q)return esc(t);
+  const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return esc(t).replace(new RegExp(eq,'gi'),m=>'<span class="highlight">'+m+'</span>');
+}
+
+// Q1 gauge
+function renderQ1(){
+  const g=document.getElementById('q1Gauge');
+  const l=document.getElementById('q1Legend');
+  Q1_DATA.forEach(d=>{
+    const p=(d.count/TOTAL*100).toFixed(0);
+    const s=document.createElement('div');
+    s.className='gauge-seg';
+    s.style.cssText='width:'+p+'%;background:'+d.color;
+    s.title=d.label+': '+d.count+'名 ('+p+'%)';
+    if(+p>=10)s.textContent=p+'%';
+    g.appendChild(s);
+    const li=document.createElement('div');
+    li.className='gauge-legend-item';
+    li.innerHTML='<div class="gauge-legend-dot" style="background:'+d.color+'"></div><span>'+esc(d.label)+' '+d.count+'名 ('+p+'%)</span>';
+    l.appendChild(li);
+  });
+}
+
+// Horizontal bar with side labels (compact)
+function renderHBars(id,data){
+  const c=document.getElementById(id);
+  const mx=data[0].count;
+  data.forEach((d,i)=>{
+    const p=(d.count/TOTAL*100).toFixed(0);
+    const w=(d.count/mx*100).toFixed(1);
+    const el=document.createElement('div');
+    el.className='hbar-item';
+    el.innerHTML='<div class="hbar-label">'+esc(d.label)+'</div>'+
+      '<div class="hbar-track"><div class="hbar-fill'+(i>0?' dim':'')+'" style="width:'+w+'%"><span class="hbar-val">'+p+'%</span></div></div>'+
+      '<div class="hbar-abs">'+d.count+'名</div>';
+    c.appendChild(el);
+  });
+}
+
+// Horizontal bar with label ABOVE (wide bar) for Section 02
+function renderHBars2(id,data){
+  const c=document.getElementById(id);
+  const mx=data[0].count;
+  data.forEach((d,i)=>{
+    const p=(d.count/TOTAL*100).toFixed(0);
+    const w=(d.count/mx*100).toFixed(1);
+    const el=document.createElement('div');
+    el.className='hbar2-item';
+    el.innerHTML=
+      '<div class="hbar2-label">'+esc(d.label)+'</div>'+
+      '<div class="hbar2-row">'+
+        '<div class="hbar2-track"><div class="hbar2-fill'+(i>0?' dim':'')+'" style="width:'+w+'%"><span class="hbar2-val">'+p+'%</span></div></div>'+
+        '<div class="hbar2-abs">'+d.count+'名</div>'+
+      '</div>';
+    c.appendChild(el);
+  });
+}
+
+// Q7 category bars
+function renderQ7CatBars(){
+  const c=document.getElementById('q7CatBars');
+  const mx=Q7_CAT_META[0].count;
+  Q7_CAT_META.forEach(d=>{
+    const p=(d.count/TOTAL*100).toFixed(0);
+    const w=(d.count/mx*100).toFixed(1);
+    const el=document.createElement('div');
+    el.className='hbar-item';
+    el.innerHTML='<div class="hbar-label">'+esc(d.label)+'</div>'+
+      '<div class="hbar-track"><div class="hbar-fill" style="width:'+w+'%;background:'+d.color+'"><span class="hbar-val">'+d.count+'件</span></div></div>'+
+      '<div class="hbar-abs" style="font-size:11px">'+p+'%</div>';
+    c.appendChild(el);
+  });
+}
+
+// Q5 donut
+function renderQ5(){
+  const ctx=document.getElementById('q5Chart').getContext('2d');
+  new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:Q5_DATA.map(d=>d.label),datasets:[{data:Q5_DATA.map(d=>d.count),backgroundColor:Q5_DATA.map(d=>d.color),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.raw+'名 ('+Math.round(c.raw/TOTAL*100)+'%)'}}}}
+  });
+  const l=document.getElementById('q5Legend');
+  Q5_DATA.forEach(d=>{
+    const p=(d.count/TOTAL*100).toFixed(0);
+    const li=document.createElement('div');
+    li.className='legend-item';
+    li.innerHTML='<div class="legend-dot" style="background:'+d.color+'"></div><div class="legend-label">'+esc(d.label)+'</div><div class="legend-count">'+d.count+'名</div><div class="legend-pct">'+p+'%</div>';
+    l.appendChild(li);
+  });
+}
+
+// Profile toggle
+function toggleProfile(){
+  const btn=document.getElementById('profileBtn');
+  const panel=document.getElementById('profilePanel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+  btn.querySelector('.profile-toggle-chevron').textContent=panel.classList.contains('open')?'▴':'▾';
+  if(panel.classList.contains('open')&&!panel.dataset.built){
+    renderQ5();
+    panel.dataset.built='1';
+  }
+}
+
+// Q7 category blocks — open by default, 2 quotes shown, rest behind toggle
+function renderQ7Cats(){
+  const wrap=document.getElementById('q7Categories');
+  Q7_CAT_META.forEach(cat=>{
+    const reps=Q7_REP[cat.key]||[];
+    const block=document.createElement('div');
+    block.className='q7-cat-block open';
+    block.id='qb-'+cat.key;
+    const w=(cat.count/Q7_CAT_META[0].count*100).toFixed(0);
+    // Show first 2 quotes by default
+    const repHtml=reps.slice(0,2).map(r=>
+      '<div class="q7-quote">'+esc(r.text)+'<div class="q7-quote-author">— '+esc(r.name)+'</div></div>'
+    ).join('');
+    block.innerHTML=
+      '<div class="q7-cat-header" onclick="toggleCat(\''+cat.key+'\')">'+
+        '<div class="q7-cat-name">'+esc(cat.label)+'</div>'+
+        '<div class="q7-cat-bar-wrap"><div class="q7-cat-bar-fill" style="width:'+w+'%;background:'+cat.color+'"><span class="q7-cat-bar-val">'+cat.count+'件</span></div></div>'+
+        '<div class="q7-cat-count">'+Math.round(cat.count/TOTAL*100)+'%</div>'+
+        '<div class="q7-cat-chevron">&#9662;</div>'+
+      '</div>'+
+      '<div class="q7-cat-body">'+
+        '<div class="q7-rep-quotes">'+repHtml+'</div>'+
+        '<button class="q7-expand-btn" id="exbtn-'+cat.key+'" onclick="expandAll(\''+cat.key+'\',event)">すべての'+cat.count+'件を見る &#9662;</button>'+
+        '<div class="q7-all-list" id="qall-'+cat.key+'"></div>'+
+      '</div>';
+    wrap.appendChild(block);
+  });
+}
+
+function toggleCat(k){document.getElementById('qb-'+k).classList.toggle('open');}
+
+function expandAll(k,e){
+  e.stopPropagation();
+  const list=document.getElementById('qall-'+k);
+  const btn=document.getElementById('exbtn-'+k);
+  const meta=Q7_CAT_META.find(c=>c.key===k);
+  if(list.classList.contains('open')){
+    list.classList.remove('open');
+    btn.innerHTML='すべての'+meta.count+'件を見る &#9662;';
+    return;
+  }
+  if(!list.dataset.built){
+    (Q7_CAT_LISTS[k]||[]).forEach(item=>{
+      const div=document.createElement('div');
+      div.className='q7-all-item';
+      div.innerHTML='<div class="q7-all-author">'+esc(item.name)+' / '+esc(item.q1)+'</div>'+esc(item.text);
+      list.appendChild(div);
+    });
+    list.dataset.built='1';
+  }
+  list.classList.add('open');
+  btn.innerHTML='閉じる &#9652;';
+}
+
+// 全コメント検索 (内蔵型)
+let shown=0,filtered=[...ALL_COMMENTS];
+const PG=20;
+function q1cls(q1){if(q1.includes('使いづらい'))return'bad';if(q1.includes('まあ')||q1.includes('とても'))return'good';return'neutral';}
+
+function toggleAllComments(){
+  const panel=document.getElementById('allCommentsPanel');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')){
+    renderComments(true);
+    document.getElementById('allCommentSearch').focus();
+  }
+}
+
+function renderComments(reset){
+  const list=document.getElementById('commentList');
+  const q=document.getElementById('allCommentSearch').value.trim();
+  const btn=document.getElementById('loadMoreBtn');
+  if(reset){
+    list.innerHTML='';shown=0;
+    filtered=q?ALL_COMMENTS.filter(c=>c.text.includes(q)||c.name.includes(q)):[...ALL_COMMENTS];
+    document.getElementById('searchCount').textContent='全 '+filtered.length+' 件'+(q?' — 「'+q+'」で絞り込み中':'');
+  }
+  // Auto-open panel if searching and panel is closed
+  const panel=document.getElementById('allCommentsPanel');
+  if(q&&!panel.classList.contains('open')){panel.classList.add('open');}
+
+  filtered.slice(shown,shown+PG).forEach(c=>{
+    const cls=q1cls(c.q1);
+    const card=document.createElement('div');
+    card.className='comment-card '+cls;
+    card.innerHTML='<div class="comment-header"><span class="comment-name">'+esc(c.name)+'</span><span class="q1-badge '+cls+'">'+esc(c.q1)+'</span></div>'+
+      '<div class="comment-text">'+hi(c.text,q)+'</div>';
+    list.appendChild(card);
+  });
+  shown+=Math.min(PG,filtered.length-shown+(shown===0?0:0));
+  // recalculate
+  const sl=filtered.slice(0,shown);
+  shown=sl.length+PG>filtered.length?filtered.length:shown;
+  // simpler
+  shown=Math.min(shown,filtered.length);
+  btn.style.display=shown>=filtered.length?'none':'block';
+  if(btn.style.display!=='none')btn.textContent='さらに読み込む（残り '+(filtered.length-shown)+' 件）';
+}
+function loadMore(){
+  const list=document.getElementById('commentList');
+  const q=document.getElementById('allCommentSearch').value.trim();
+  const btn=document.getElementById('loadMoreBtn');
+  const start=list.children.length;
+  filtered.slice(start,start+PG).forEach(c=>{
+    const cls=q1cls(c.q1);
+    const card=document.createElement('div');
+    card.className='comment-card '+cls;
+    card.innerHTML='<div class="comment-header"><span class="comment-name">'+esc(c.name)+'</span><span class="q1-badge '+cls+'">'+esc(c.q1)+'</span></div>'+
+      '<div class="comment-text">'+hi(c.text,q)+'</div>';
+    list.appendChild(card);
+  });
+  shown=list.children.length;
+  btn.style.display=shown>=filtered.length?'none':'block';
+  if(btn.style.display!=='none')btn.textContent='さらに読み込む（残り '+(filtered.length-shown)+' 件）';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderQ1();
+  renderHBars('q2Bars',Q2_DATA);
+  renderHBars2('q3Bars',Q3_DATA);
+  renderHBars2('q4Bars',Q4_DATA);
+  renderQ7CatBars();
+  renderQ7Cats();
+  document.getElementById('allCommentSearch').addEventListener('input',()=>renderComments(true));
+});
+
+</script>
+</body>
+</html>

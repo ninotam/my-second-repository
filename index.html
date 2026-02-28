@@ -124,6 +124,10 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-ser
 .q7-expand-btn:hover{background:#f0f2ff;border-color:var(--blurple)}
 .q7-all-list{display:none;margin-top:10px;border:1px solid #eee;border-radius:6px;max-height:400px;overflow-y:auto}
 .q7-all-list.open{display:block}
+.q7-cat-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px}
+.q7-col-label{font-size:11px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.q7-summary-text{font-size:13px;color:#555;line-height:1.7;background:#f8f9ff;border-radius:6px;padding:12px 14px}
+@media(max-width:600px){.q7-cat-2col{grid-template-columns:1fr}}
 .q7-all-item{padding:8px 12px;border-bottom:1px solid #f5f5f5;font-size:12px;line-height:1.5;color:#444;white-space:pre-line}
 .q7-all-item:last-child{border-bottom:none}
 .q7-all-author{font-size:11px;color:#aaa;margin-bottom:2px}
@@ -164,8 +168,8 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-ser
 .insight-block-body{font-size:13px;color:#444;line-height:1.7}
 
 /* ACTION CARDS */
-.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
-@media(max-width:800px){.action-grid{grid-template-columns:1fr}}
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:32px}
+@media(max-width:700px){.action-grid{grid-template-columns:1fr}}
 .action-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:26px 22px;display:flex;flex-direction:column;gap:0}
 .action-num{font-size:36px;font-weight:900;color:rgba(88,101,242,.4);line-height:1;margin-bottom:10px;font-family:Georgia,serif}
 .action-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.4}
@@ -219,8 +223,8 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-ser
       </div>
     </div>
     <div class="conclusion-box">
-      「使いにくい」の根本は<strong>チャンネル構造の複雑さ</strong>と<strong>入口のわかりにくさ</strong>にある。<br>
-      構造を整えた上で、<strong>AI活用コンテンツを起点</strong>とした体験設計に移行する。
+      使いにくさの根本は、<strong>チャンネル構造の複雑さ</strong>や<strong>入り口の分かりにくさ</strong>、<strong>オンボーディングの動線</strong>にある。<br>
+      構造を整え、ライト層にも伝わる<strong>AIコミュニティらしい体験設計</strong>へ移行する。
     </div>
 
     <!-- 会員プロファイル：トグル -->
@@ -358,60 +362,74 @@ body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-ser
 <section class="section section-dark">
   <div class="container">
     <div class="section-label">Section 03 — 改善提案</div>
-    <h2 class="section-title">この結果から、やること3つ</h2>
+    <h2 class="section-title">この結果から、やること4つ</h2>
     <p class="section-desc">データが示す優先課題への、具体的なアクション。</p>
     <div class="action-grid">
 
       <div class="action-card">
         <div class="action-num">①</div>
-        <div class="action-title">チャンネル構造の全体見直し</div>
-        <div class="action-tagline">目標：「オカンが見てもわかるDiscord」</div>
+        <div class="action-title">チャンネル数を絞る</div>
+        <div class="action-tagline">15〜20チャンネルへ再設計</div>
         <div class="action-section-title">現状の課題</div>
         <div class="action-body">
-          <p>チャンネル数が多すぎて、どこで何をすればいいかわからない。投稿場所が見つからず、結果として「見るだけ」で終わるメンバーが多い。</p>
+          <p>チャンネル数42・カテゴリ数11という構造が「どこで何をすればいいか」をわかりにくくしている。投稿場所が見つからないまま「見るだけ」で終わるメンバーが多い。また「チャンネルカスタム」ロールがないと見えないチャンネルがあり、存在自体に気づけていないケースも多い。</p>
         </div>
         <div class="action-section-title">やること</div>
         <div class="action-body">
-          <p>全チャンネルを棚卸しし、カテゴリを最大5〜6に絞る。</p>
-          <p>各チャンネルに「ここで何ができるか」を一言で書いたピン留めを設置。入会直後に見るべき「スタートチャンネル」を一本化し、迷わず始められる導線を作る。</p>
+          <p>チャンネル数を現在の42から15〜20に削減する。チャンネルカスタムロールがないと見えなかったチャンネルを標準表示に変更し、入会直後からすべての場所にアクセスできる設計にする。</p>
         </div>
         <div class="action-evidence">
           <div class="action-ev-item">困ったこと「チャンネルで迷った」<strong> 117名（68%）</strong></div>
-          <div class="action-ev-item">自由記述・チャンネル複雑さカテゴリ<strong> 42件</strong></div>
         </div>
       </div>
 
       <div class="action-card">
         <div class="action-num">②</div>
-        <div class="action-title">AI活用コンテンツのツール別集約</div>
-        <div class="action-tagline">「探す手間ゼロ」のコンテンツ棚</div>
+        <div class="action-title">カテゴリをわかりやすく</div>
+        <div class="action-tagline">場所の役割が一目でわかる設計</div>
         <div class="action-section-title">現状の課題</div>
         <div class="action-body">
-          <p>良いコンテンツが投稿されても、チャットの流れに埋もれて見つけられない。「情報が流れて追いづらい」という声が93名から上がっている。</p>
+          <p>カテゴリがチャンネルと同じように見えてしまい、全体構造が掴みにくい。「どこで何をすればいいか」がわからず、投稿先に迷ったまま行動できないメンバーが多い。</p>
         </div>
         <div class="action-section-title">やること</div>
         <div class="action-body">
-          <p>ChatGPT / Claude / Gemini などツール別に活用例タグを整備。</p>
-          <p>週次ハイライトをまとめる専用チャンネルを新設し、固定投稿と定期サマリーで情報の棚卸しを行う。「見たいときに見つけられる状態」を維持する。</p>
+          <p>かたまりごとに「何をする場所か」が明確になる構造へ刷新する。投稿・質問・閲覧などのアクションが一目でわかる見せ方にし、ライト層やシニア層でも迷わず動けるDiscord構造を目指す。</p>
         </div>
         <div class="action-evidence">
-          <div class="action-ev-item">「AI活用例がまとまる場所を求める」<strong> 120名（70%）</strong></div>
-          <div class="action-ev-item">困ったこと「情報が流れて追いづらい」<strong> 93名（54%）</strong></div>
+          <div class="action-ev-item">困ったこと「チャンネルで迷った」<strong> 117名（68%）</strong></div>
+          <div class="action-ev-item">困ったこと「どこに投稿すればよいかわからなかった」<strong> 77名（45%）</strong></div>
         </div>
       </div>
 
       <div class="action-card">
         <div class="action-num">③</div>
-        <div class="action-title">AIを入口にした体験設計</div>
-        <div class="action-tagline">既存Q&amp;ABotの強化 + 自動スレッド立て</div>
+        <div class="action-title">ツール別チャンネルを新設</div>
+        <div class="action-tagline">ChatGPT・Claude・Gemini専用の場所</div>
         <div class="action-section-title">現状の課題</div>
         <div class="action-body">
-          <p>入会直後に「何をすればいいかわからない」という迷いが発生し、最初の一歩が踏み出せないまま離脱するメンバーが多い。</p>
+          <p>ジャンル別雑談（副業・AI活用など）の中では複数のAIの情報が混在しており、自分が使っていないAIの話がノイズになっていた。欲しい情報だけを得られる専用の場所がなかった。</p>
         </div>
         <div class="action-section-title">やること</div>
         <div class="action-body">
-          <p>初心者チャンネルへの投稿 → 自動でスレッドが立つ → 同じ境遇のメンバーが集まる、というフローを設計。</p>
-          <p>Q&amp;ABotの回答精度を向上させ、「使い方がわからない」に即答できる体制を整える。孤独感なく使い始められる体験を作る。</p>
+          <p>ChatGPT・Claude・Geminiなどツール別の専用チャンネルを新設する。そのチャンネルを見るだけでそのAIの活用情報が集まる設計にし、関連ニュースが自動的に流れる仕組みも目指す。</p>
+        </div>
+        <div class="action-evidence">
+          <div class="action-ev-item">「AI活用例がまとまる場所を求める」<strong> 120名（70%）</strong></div>
+          <div class="action-ev-item">自由記述「情報が流れる・探せない」<strong> 23件</strong></div>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">④</div>
+        <div class="action-title">AIコミュニティのBot体験設計</div>
+        <div class="action-tagline">まずBotに聞く、が新しい習慣</div>
+        <div class="action-section-title">現状の課題</div>
+        <div class="action-body">
+          <p>入会後に「何をすればいいかわからない」という迷いが生じ、最初の一歩が踏み出せない。「人に聞く」ハードルが高く、質問を諦めるメンバーが多い。</p>
+        </div>
+        <div class="action-section-title">やること</div>
+        <div class="action-body">
+          <p>Q&amp;ABotをコミュニティの入口に置き、「まずBotに話しかける」ことを起点とした体験を設計する。チャンネルの場所・動画講義の案内・よくある疑問をBotで即解決できるようにする。Botで解決できない場合は質問スレッドへ自然に誘導し、AIに聞いてから人に聞くという習慣を定着させる。</p>
         </div>
         <div class="action-evidence">
           <div class="action-ev-item">自由記述「使い方・入口がわからない」カテゴリ<strong> 85件</strong></div>
@@ -498,6 +516,13 @@ const Q7_REP={
     {name:'あいむ',text:'通知が多くて追いつけない'},
     {name:'creator hyde',text:'新しい通知が来てもわからない'},
   ],
+};
+const Q7_SUMMARY={
+  A:'「どこから使えばいいかわからない」という声が最多。チャンネルが多すぎて入口が見えない、自分がどこにいるかわからないという迷子状態が多く報告された。入会直後の動線設計の不備が最大の課題。',
+  B:'カテゴリとチャンネルが同等に見えてしまい、全体構造が掴みにくいという指摘が多数。どこに何があるかの案内がないため、使いこなせないまま終わるケースが目立つ。',
+  C:'良い情報が投稿されても時間とともに流れてしまい、後から探し出せないというフラストレーションが多く見られた。ピン留めや検索の活用、フォーラム形式への移行を求める声が複数あった。',
+  E:'通知が多すぎて追いつけない・無効化してしまうという声が中心。通知をオフにした結果、重要な情報も見逃す悪循環が報告された。通知の頻度や種類を選べる設計を求める意見が多い。',
+  D:'すでにスキルのある人ばかりに見えて、初心者が発言しにくい雰囲気があるという声が複数。アクティブユーザーが少なく感じられ、交流が生まれにくいという指摘もあった。参加しやすい場や仕組みの設計が必要。',
 };
 
 </script>
@@ -617,17 +642,18 @@ function toggleProfile(){
   }
 }
 
-// Q7 category blocks — open by default, 2 quotes shown, rest behind toggle
+// Q7 category blocks — open by default, summary + 3 quotes, rest behind toggle
 function renderQ7Cats(){
   const wrap=document.getElementById('q7Categories');
   Q7_CAT_META.forEach(cat=>{
     const reps=Q7_REP[cat.key]||[];
+    const summary=Q7_SUMMARY[cat.key]||'';
     const block=document.createElement('div');
     block.className='q7-cat-block open';
     block.id='qb-'+cat.key;
     const w=(cat.count/Q7_CAT_META[0].count*100).toFixed(0);
-    // Show first 2 quotes by default
-    const repHtml=reps.slice(0,2).map(r=>
+    // Show 3 quotes
+    const repHtml=reps.slice(0,3).map(r=>
       '<div class="q7-quote">'+esc(r.text)+'<div class="q7-quote-author">— '+esc(r.name)+'</div></div>'
     ).join('');
     block.innerHTML=
@@ -638,8 +664,17 @@ function renderQ7Cats(){
         '<div class="q7-cat-chevron">&#9662;</div>'+
       '</div>'+
       '<div class="q7-cat-body">'+
-        '<div class="q7-rep-quotes">'+repHtml+'</div>'+
-        '<button class="q7-expand-btn" id="exbtn-'+cat.key+'" onclick="expandAll(\''+cat.key+'\',event)">すべての'+cat.count+'件を見る &#9662;</button>'+
+        '<div class="q7-cat-2col">'+
+          '<div class="q7-summary-col">'+
+            '<div class="q7-col-label">分析まとめ</div>'+
+            '<div class="q7-summary-text">'+esc(summary)+'</div>'+
+          '</div>'+
+          '<div class="q7-quotes-col">'+
+            '<div class="q7-col-label">生の声</div>'+
+            repHtml+
+          '</div>'+
+        '</div>'+
+        '<button class="q7-expand-btn" id="exbtn-'+cat.key+'" onclick="expandAll(\''+cat.key+'\',event)">すべての内容を見る &#9662;</button>'+
         '<div class="q7-all-list" id="qall-'+cat.key+'"></div>'+
       '</div>';
     wrap.appendChild(block);
